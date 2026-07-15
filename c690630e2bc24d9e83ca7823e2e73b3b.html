@@ -1,0 +1,514 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='robots' content='noindex, nofollow, noarchive'><title>‘No company is going to go to jail for you’: Proton’s CTO on balancing privacy, policy, and trust</title><meta property='og:type' content='article'><meta property='og:site_name' content="The Verge"><meta property='og:title' content="‘No company is going to go to jail for you’: Proton’s CTO on balancing privacy, policy, and trust"><meta property='og:image' content="https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/DCD-Bart-Butler.png?quality=90&amp;strip=all&amp;crop=0,0,100,100"></head><body><article><h1>‘No company is going to go to jail for you’: Proton’s CTO on balancing privacy, policy, and trust</h1>
+
+																		
+
+							
+<figure>
+
+<img alt="A photo illustration of Proton CTO Bart Butler." data-caption="" data-portal-copyright="Image: The Verge / Photo: Proton" data-has-syndication-rights="1" src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/DCD-Bart-Butler.png?quality=90&#038;strip=all&#038;crop=0,0,100,100" />
+	<figcaption>
+		</figcaption>
+</figure>
+
+							<p class="has-drop-cap wp-block-paragraph">Today on <em>Decoder</em>, we’ve got the first of a two-part series on the systems that run the world: I’m talking with Bart Butler, the CTO of Proton, the company that makes private and secure productivity software.</p>
+
+<p class="wp-block-paragraph">You probably know it best for Proton Mail, which is encrypted by default, but the company also has <a href="https://www.theverge.com/tech/903554/proton-now-offers-an-entire-bundle-of-office-services">docs, sheets, a calendar</a>, and even a new AI assistant called Lumo, all built and marketed around the idea that they should be vastly more private than the products from Big Tech companies.</p>
+
+<p class="wp-block-paragraph">You’ll hear Bart say pretty plainly that the thing Proton sells, at a high level, isn’t really the products themselves, but actually trust. And trust in the software world isn’t only about the people who run the companies, but also the technology they develop and sell and the corporate structure in place to make sure that technology is built against the right incentives. Pure <em>Decoder</em> bait, in other words. The challenge is that Bart also says part of Proton’s mission is very much to succeed at being a viable competitor to Big Tech, and that means the company has to grow and expand to competitive scale, all while preserving its core values.</p>
+
+<p class="wp-block-paragraph">This philosophy, and that challenge, is baked directly into Proton’s structure and even its physical location — the company and its servers are based in Switzerland, in part because of the Swiss government’s geopolitical neutrality. Two years ago, Proton also transitioned to a nonprofit structure governed by a foundation, which is a familiar model used by all kinds of companies that ostensibly operate in the public interest, but which has failure modes of its own, as <a href="https://www.theverge.com/news/807875/openai-microsoft-for-profit-agi">we just saw with OpenAI</a>.</p>
+
+<div class="wp-block-vox-media-highlight vox-media-highlight"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24792604/The_Verge_Decoder_Tileart.jpg?quality=90&amp;strip=all&amp;crop=0,0,100,100" alt="" title="" data-has-syndication-rights="1" data-caption="" data-portal-copyright="" />
+
+
+<p class="wp-block-paragraph"><em>Verge</em> subscribers, don&#8217;t forget you get exclusive access to ad-free <em>Decoder</em> wherever you get your podcasts. Head <a href="https://www.theverge.com/account/podcasts">here</a>. Not a subscriber? You can <a href="https://www.theverge.com/subscribe">sign up here</a>. </p>
+</div>
+
+<p class="wp-block-paragraph">We talked about all of that, but I really wanted to talk to Bart because he’s responsible for the technical construction of some very complex systems that interact with all these complex politics. I really wanted to know how you translate all these lofty ideals and concepts like user trust into real, privacy-centric products and features that can withstand all this policy pressure.&nbsp;</p>
+
+<p class="wp-block-paragraph">For example, earlier this year, the Swiss government <a href="https://www.404media.co/proton-mail-helped-fbi-unmask-anonymous-stop-cop-city-protestor/">requested payment data</a> that led the FBI to unmask a protester associated with the Stop Cop City movement in Atlanta, Georgia, a request Proton complied with. So of course I had to ask Bart about all that, and what it means that the US government can use words like “terrorism” to coerce foreign governments to apply pressure on Proton — and how the company decides when and how to take on those fights. </p>
+
+<p class="wp-block-paragraph">This pressure manifests in all kinds of ways. Proton is on the record <a href="https://www.vice.com/en/article/proton-says-it-will-leave-switzerland-if-controversial-swiss-law-passes/">saying it will leave Switzerland</a>, and Bart says it would also consider ditching its operations in EU countries like Germany and Norway if various surveillance laws working their way through European courts <a href="https://www.wired.com/story/a-majority-of-european-lawmakers-voted-against-letting-big-tech-read-our-messages-theyre-going-to-anyway/">continue to threaten Proton’s privacy mission</a>. Bart told me these aren’t just empty threats and that Proton is in the process of figuring out what it would mean to leave Europe if things get, in his words, more “dystopian.”</p>
+
+<p class="wp-block-paragraph">There is a whole lot in this one. We ran pretty long because we got so deep in the weeds. We first spent the time talking through the broad frameworks before talking about the very real problems of child safety, age verification, and AI — all of which are testing Proton’s values with some of the highest-stakes problems on the internet today. But we took the extra time to get there, and I hope you’ll think it was worth it.&nbsp;&nbsp;</p>
+
+<p class="wp-block-paragraph">Okay: Bart Butler, the CTO of Proton. Here we go.</p>
+
+<iframe loading="lazy" frameborder="0" height="200" src="https://playlist.megaphone.fm?e=VMP8586650749" width="100%"></iframe>
+
+<p class="wp-block-paragraph"><em>This interview has been lightly edited for length and clarity.</em></p>
+
+<p class="wp-block-paragraph"><strong>Bart Butler, you&#8217;re the chief technology officer at Proton. Welcome to </strong><strong><em>Decoder.</em></strong></p>
+
+<p class="wp-block-paragraph">Thank you. Happy to be here.</p>
+
+<p class="wp-block-paragraph"><strong>I&#8217;m excited to talk to you. It feels like Proton sits at the center of an escalating, spiraling debate about how we build technology systems, how we regulate them, and how consumers can protect their data or have any control at all over their data at the center of it.</strong></p>
+
+<p class="wp-block-paragraph"><strong>Let&#8217;s start at the very start. I think most people understand Proton as ProtonMail, but there&#8217;s now a suite of office products and productivity products. Describe what Proton is and how you see all the products working together.</strong></p>
+
+<p class="wp-block-paragraph">So Proton is an ecosystem, if you will — a collection of products that all share the same DNA in the sense that they fundamentally are, in many cases, versions of products you can buy elsewhere, but that are privacy preserving, right?&nbsp;</p>
+
+<p class="wp-block-paragraph">Yes, we started with mail. We also have a VPN. We have a Proton Drive, which is our file storage, photos, and collaborative real-time docs. We have a calendar. We have a password manager called Proton Pass. We have Meet, which is a video conferencing software. So we have a whole collection of products that do things in some cases very similar to other products that you might be more familiar with, but are also privacy-preserving.</p>
+
+<p class="wp-block-paragraph"><strong>One of the reasons I&#8217;m excited to talk to you specifically as chief technology officer is the idea that there&#8217;s a set of products that are familiar, but the company running them is going to behave better than the other company, is a familiar pattern in this industry.</strong></p>
+
+<p class="wp-block-paragraph">Sure, it is.</p>
+
+<p class="wp-block-paragraph"><strong>And Proton promises that the products are actually architected differently.</strong></p>
+
+<p class="wp-block-paragraph">Yes.</p>
+
+<p class="wp-block-paragraph"><strong>That from the very beginning, the way the products are built is actually what makes and keeps the promise of protecting privacy, not a benevolent CEO or a benevolent board of directors. We&#8217;ll come to that. There&#8217;s some of that in the mix here.</strong></p>
+
+<p class="wp-block-paragraph">There&#8217;s some of that, too. There&#8217;s some corporate structure stuff, but yes, I also consider that there are actually, I would say, two primary structural… or maybe systems. You could call them systems engineering at a broader scale, but structural constraints on how Proton operates.</p>
+
+<p class="wp-block-paragraph">The first is that we encrypt all the data we can. So if we wanted to turn around and sell that data to somebody, we can&#8217;t. It&#8217;s mathematically not possible for us to do it, right? This also has other benefits. We can&#8217;t easily lose it to hackers or other interested parties, and there&#8217;s some data that we can respond to for, say, legal requests, but there&#8217;s some data we can&#8217;t. And this helps us; basically, we can&#8217;t give up data that we don&#8217;t have access to.</p>
+
+<p class="wp-block-paragraph">The second is the business model. I mean, there are other SaaS players, of course, that do this. I don&#8217;t think there are a whole lot of B2C consumer-based SaaS players at our size who do this, but our revenue model is getting paid by our users, right? So we don&#8217;t sell ads. The products are not carrots to get people to come in and give us their data so we can sell it to advertisers. And that means that those users — the ones who pay our bills, pay our salaries — allow us to grow the business.</p>
+
+<p class="wp-block-paragraph">If we were to betray them, then that would essentially undermine the value of the business. We have tied the value of the business and the growth of the business to protecting our users so that our interests are aligned. This is also very important because temptations are a thing. People respond to incentives, and we have structurally arranged our company such that those incentives are aligned with the people to whom we have promised to protect.</p>
+
+<p class="wp-block-paragraph"><strong>If I were to very reductively summarize what you just said, it is that we take money from consumers, and what we sell them is encrypted versions of popular services that they rely on, like email, a VPN, and an office suite.</strong></p>
+
+<p class="wp-block-paragraph"><strong>Do you think consumers understand that what they&#8217;re buying is the technology solution, or are they buying the promise of privacy? Or is it some mix? Because I&#8217;m not actually sure consumers really understand at mass scale how it all works, right? They think their iPhones are listening to them.</strong></p>
+
+<p class="wp-block-paragraph">What I will tell product people and engineers in meetings about new features is that if you&#8217;ve mentioned the word encryption to the user, you&#8217;ve already failed. I mean, people don&#8217;t understand what this is. That&#8217;s fine. Our goal is to make products that are as usable and as functional as our competitors, or more functional.</p>
+
+<p class="wp-block-paragraph">I mean, I don&#8217;t want to sound entirely derivative. We do have features that nobody else has that are often geared towards privacy and functionality for people who need confidential communications. However, in general, we&#8217;re selling the promise. We&#8217;re selling the promise that we&#8217;re a different kind of company. We&#8217;re selling the trust — and that trust is critical. Without trust… That is where the real value of the company is. Now, that trust is backed up by technology, right? But we&#8217;re selling the trust.</p>
+
+<p class="wp-block-paragraph"><strong>The reason I&#8217;m pushing on it, and specifically I&#8217;m happy that you mentioned trust, is that the big tech players will all make the same kinds of promises about your data being private. Facebook will happily tell you that they don&#8217;t sell an ounce of your data. It&#8217;s actually not in their interest to sell the data because the ad targeting that they do depends on the data being theirs and not anyone else&#8217;s. We can get into this for days and days and days.</strong></p>
+
+<p class="wp-block-paragraph"><strong>I&#8217;m just curious where you see that trust being expressed or where you feel like that trust is most communicated from Proton. Because if you ask me, as a more technical person, I do look at the architecture of “it&#8217;s all encrypted” and probably mathematically, it&#8217;s impossible to get into. Sure, we&#8217;ll come to how much metadata can be shared with authorities because there&#8217;s some debate about that.</strong></p>
+
+<p class="wp-block-paragraph"><strong>But that&#8217;s the piece that resonates for me as opposed to trusting you or a board of directors. Some other people just look at the promises and take them at face value. Then there&#8217;s some set of regulators that say, &#8220;Actually, we have a bunch of other interests in being able to see the data that goes on here, and we actually don&#8217;t trust you to be a good player in the ecosystem.&#8221;</strong></p>
+
+<p class="wp-block-paragraph"><strong>So when you think about trust, does it come down to “the data is encrypted, and that&#8217;s the core promise we&#8217;re making, and anything that breaks that also breaks the whole product”? Or is there some other dimension of trust that is important at Proton as you build the systems?</strong></p>
+
+<p class="wp-block-paragraph">So end-to-end encryption is obviously important. It&#8217;s the gold standard, and it&#8217;s what we strive for. However, there are definitely features that we… privacy, at least to me personally, is about control. There are some times when I want an integration with an external service or something like this, and I mean, my choices are no integration or breaking end-to-end encryption.</p>
+
+<p class="wp-block-paragraph">Our goal is to make it so the user has an informed choice and control over who sees their data. So it&#8217;s not the same as never sharing your data or never sharing your photos with anybody. But the point is, instead of sharing your photos with somebody like Facebook who might monetize them, it&#8217;s sharing your photos with grandma and grandpa, and only grandma and grandpa.</p>
+
+<p class="wp-block-paragraph">That&#8217;s not to say that encryption is everything, but I think we&#8217;ve set up… I don&#8217;t know if we want to get into the corporate structure right now. But we&#8217;ve set up the fundamental engineering, which backs up the trust. People like you look at the architecture and say, &#8220;Okay, this is encrypted. This is important to me.&#8221; And then you go tell somebody else, and to that other person you say, &#8220;I trust Proton because of this, this, and this.&#8221; The other person, all they know is, &#8220;Hey, I know Nilay, I trust him, and he says Proton is good.&#8221;</p>
+
+<p class="wp-block-paragraph">There&#8217;s a whole cohort much, much greater than the techie cohort. The techie cohort is our core, of course, and has been since the beginning, but there&#8217;s a whole cohort of people who trust Proton because of other people they know. And by now, I mean it might just be people they trust on Reddit, right? But other people they know say Proton is there.&nbsp;</p>
+
+<p class="wp-block-paragraph">And what I&#8217;m trying to say is we have set up&#8230; We&#8217;ve all been getting object lessons in the rules, bylaws, laws, other things that can be worth something, but ultimately are worth something when they are&#8230; Personnel really matters, right? Who enforces them really matters. So we have the technical layer, which is designed to constrain what we can do technically, and then we also have the legal and corporate structure layer, which is its defense in depth, basically. It&#8217;s defense in depth. All of these things are interlocking guarantees to our users that we are trustworthy. Ultimately, that&#8217;s the most important thing about the business.</p>
+
+<p class="wp-block-paragraph"><strong>I do want to come to the corporate structure. It is </strong><strong><em>Decoder</em></strong><strong> after all, but just one more turn on the product set itself. You started with ProtonMail. You&#8217;ve got the other suite of products, including now an AI Assistant.</strong></p>
+
+<p class="wp-block-paragraph"><strong>You talked about the fact that the business model is the consumers paying money directly for the products. Is ProtonMail still the core product that&#8217;s making the most money? Are the other lines of business growing? How does this look?</strong></p>
+
+<p class="wp-block-paragraph">So we don&#8217;t disclose direct financials. Mail and VPN are the two oldest products, and as you might expect, they are the two largest products still. But we also have a lot of people who buy bundles and buy multiple products. We try to make the products work well together in an ecosystem. Some products are more tightly bound than others.</p>
+
+<p class="wp-block-paragraph">The new products, the more recent ones like Calendar, are very tightly tied to Mail, of course, but we also have Drive and Pass. Those are not as big as the older products. They have less of a head start, if you will, but they are growing rapidly. So they all contribute, but yeah, they contribute differently. Often, I&#8217;m not going to say it&#8217;s exactly how old they are, but those that have had the bigger runway are usually bigger, right?</p>
+
+<p class="wp-block-paragraph"><strong>One of the patterns with consumer productivity software is that the suites get bigger, the bundles get bigger, and then the companies realize the class of customers that will actually pay for increased productivity is enterprise.</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>We see this over and over again in this space. Notion did it, Dropbox did it. I can go on and on and on about companies that we’ve covered as consumer software companies that eventually pivoted to being enterprise companies. Does Proton feel that same pressure, that you&#8217;re going to have to go have more corporate clients, enterprise clients, to grow? Or are you still focused on consumer?</strong></p>
+
+<p class="wp-block-paragraph">This is a very, very interesting question. I think we definitely feel the pressure. There’s… what is it? I don&#8217;t know if it&#8217;s apocryphal or not, but the old John Dillinger quote like, &#8220;Why do I rob banks? Well, it&#8217;s where the money is.&#8221; There&#8217;s a little bit of that in “Why do you go B2B?” Well, it&#8217;s where the people who have budgets and are willing to pay for this are.&nbsp;</p>
+
+<p class="wp-block-paragraph">I think we&#8217;re definitely considering it. Even as a primarily consumer-focused business, we have a lot of people in small businesses, in particular, who use our products for business purposes. You just use the consumer. And we&#8217;ve also made forays into small business offerings and things like that.&nbsp;</p>
+
+<p class="wp-block-paragraph">I think this is something that growth will probably demand. And I think there are a lot of businesses for whom things that we offer — confidentiality, non-US-based and European sovereignty type stuff in particular, and just our reputation — are very appealing to those businesses. That said, we have to strike a balance. And today, our business is B2C. We&#8217;re not going to jettison the B2C business. I also think that having the B2C business as strong as it is is a competitive strength.</p>
+
+<p class="wp-block-paragraph">I mean, as you said, there are several that have transitioned to B2B from B2C. But at the same time, I think there are a lot more B2B players that start B2B and stay there. And one of the things that we&#8217;re looking at… Communication between businesses and their customers is certainly important, and confidentiality is important there. You see things like WhatsApp&#8217;s forays into having businesses connect to consumers who have WhatsApp. I think that when the time comes to really make a push to B2B, the B2C user base and product suite will be a benefit to us.</p>
+
+<p class="wp-block-paragraph"><strong>One of the tensions there as AI infiltrates more and more businesses is that frontier model companies want every ounce of data. I think a bunch of big enterprises are very leery of giving a bunch of data to frontier model companies. The AI works best when they have a bunch of data, and so there&#8217;s this big choice about how much of your business you will expose to Claude. How much of yourself will you expose to Claude to get the most value out of those models?</strong></p>
+
+<p class="wp-block-paragraph"><strong>Proton sits right in the middle of that with a technical architecture that you&#8217;re saying would provide choice, but it also seems like the game for a lot of these companies is to just hand everything over and say, &#8220;Go run my business, AI.&#8221; How do you see that working with your enterprise customers today?</strong></p>
+
+<p class="wp-block-paragraph">Yeah. I mean, it&#8217;s a fraught decision. It&#8217;s giving all their sensitive data over. And they feel like, in many cases, they don&#8217;t have a choice. In some ways, that’s why we developed Lumo, our AI offering, which I think may have been left off the list before, unfortunately. I think we just launched Lumo 2.0, which is a big revamp of the models we use. And part of that is… The goal of the Lumo project in general is to have something that integrates with the rest of our products and can do this in a safe way.</p>
+
+<p class="wp-block-paragraph">This is to address this sort of trade-off between whether I give random AI companies — possibly in different countries, possibly having compliance problems, all those other things — do I give them all my sensitive business data, or can I do it in a way that is still more protected? Now, in many ways, there are still trade-offs on our side to make, but we keep it in-house within Proton with the guarantees that we give. That should be a more attractive option for those kinds of workloads, and that&#8217;s what we&#8217;re hoping for as we develop Lumo.</p>
+
+<p class="wp-block-paragraph"><strong>I think this does bring us to the </strong><strong><em>Decoder</em></strong><strong> questions about structure and organization because that&#8217;s where it feels like the structure has to be, where the trust lies, not necessarily the technical architecture. So how is Proton structured today? How many people are there?</strong></p>
+
+<p class="wp-block-paragraph">So, Proton today is approximately 650 people total. That includes engineering, support functions, marketing, et cetera. It also includes customer support, which we do in-house. We always have. We are a corporation called Proton AG, a Swiss corporation.</p>
+
+<p class="wp-block-paragraph">However, a controlling stake in Proton AG is held by the Proton Foundation, which was seeded with shares from Andy, our CEO, and other early employees. There are other fellow travelers with, I would say, somewhat similar structures. Signal and Mozilla, and our reasons are the same.</p>
+
+<p class="wp-block-paragraph">The Proton Foundation’s controlling stake in the Proton company means it is empowered to protect the mission. It&#8217;s a Swiss foundation. I&#8217;m not a lawyer, but I&#8217;ve been told it&#8217;s very difficult to change. Its job is the guardian of the values and the mission of Proton. So if Proton, the company, were to stray from that mission, the Proton Foundation would be empowered to correct course, if that makes sense.</p>
+
+<p class="wp-block-paragraph"><strong>Has that ever happened?</strong></p>
+
+<p class="wp-block-paragraph">No. Thus far, no. We have our founder and CEO, Andy Yen. Andy founded the company, and as long as he is in charge, I don&#8217;t think that&#8217;ll be necessary. But if he gets hit by the bus, there&#8217;s a corporate structure that is designed to protect the mission going forward and to make sure the company doesn&#8217;t stray regardless.</p>
+
+<p class="wp-block-paragraph">Because of this ownership model, too, the company is insulated from, say, some sort of takeover or purchase that could also redirect its priorities. I think that factor, the tech, and the business model basically are interlocking protections against us betraying the compact that we have with our users.</p>
+
+<p class="wp-block-paragraph"><strong>One of the things that strikes me as I talk to more and more companies that have transitioned to this kind of foundation model is that that structure is essentially there to insulate you from the rapacious demands of capitalism. You aren&#8217;t being pressured to make as much money every quarter as possible to do the things that would lead you to make the most money, and that means maybe the technology can develop in a pure and idealistic state of protecting privacy instead of chasing the dollars.</strong></p>
+
+<p class="wp-block-paragraph"><strong>Do you feel that insulation? I mean, you do have to make money and pay your employees and grow in some way, but what&#8217;s the dynamic for you architecting the products?</strong></p>
+
+<p class="wp-block-paragraph">So the short answer is no, and the reason for that is that part of the mission for us is that we have to compete in capitalism. Our main competitor is Big Tech. Even though we are much smaller than Big Tech, where our users come from when we convert people, when we get new customers, they&#8217;re [coming from] Big Tech in general.</p>
+
+<p class="wp-block-paragraph">We have to play the same game. This might be a little cheesy, but our corporate motto is “Privacy by default.” That “default” part is doing a lot of heavy lifting. I mentioned before that our goal is to design products that are easy to use and secure. There are plenty of tools that are secure, and nobody — but a few experts — uses them. And that&#8217;s fine. I&#8217;m not criticizing the existence of those tools, but our goal is to make tools that everybody can use without understanding the cryptography, without even knowing that it&#8217;s cryptography that they can use, and that are as easy to use and as feature-filled as our unencrypted and essentially data-mining competitors. It&#8217;s a tall order.&nbsp;</p>
+
+<p class="wp-block-paragraph">I&#8217;m not saying we&#8217;re 100 percent there yet, but that is the goal. But the default word in “privacy by default” means growth. It means we have to be at the scale where we can offer a real alternative to Big Tech. And small startups, small scaleups, being 100 times or 10 times smaller than Big Tech, are not going to cut it. In order to do that, we need to grow.</p>
+
+<p class="wp-block-paragraph">So growth is actually part of the mission, if you will. That means that we have to be… the word is not rapacious, but we have to be as hungry, efficient, and growth-minded as we possibly can because that&#8217;s part of the mission to grow big enough to actually challenge the current paradigm. I mean, we can talk about all kinds of ways capitalism is broken right now, but we have to play the game.</p>
+
+<p class="wp-block-paragraph"><strong>Yeah. All right. I&#8217;m going to make a comparison that you are going to hate. I&#8217;m just letting you know. I know you&#8217;re going to hate it.</strong></p>
+
+<p class="wp-block-paragraph">Okay.</p>
+
+<p class="wp-block-paragraph"><strong>Maybe the most famous “we&#8217;ll build a foundation to protect ourselves from the demands of the market and make sure the thing is healthy” idea is from OpenAI, which </strong><a href="https://www.theverge.com/news/807875/openai-microsoft-for-profit-agi"><strong>basically killed that structure in order to chase an IPO</strong></a><strong>, right?</strong></p>
+
+<p class="wp-block-paragraph"><strong>Maybe they still have really important and idealistic ideas about how AGI should be developed. Maybe some people in that company really feel that way, and it just didn&#8217;t work, right? They needed to chase growth in very specific ways for whatever reason they felt. Maybe it was money, maybe it was just to take on Google Search the way that OpenAI felt like it wanted to; they had to change the structure of the company.</strong></p>
+
+<p class="wp-block-paragraph"><strong>That obviously happened. It&#8217;s like one of the most apocalyptic foundation moments that has ever happened. This thing just exploded or imploded onto itself. When you look at that, and then you look at, “Okay, we have to grow. To be the default, we have to grow to be big, but we&#8217;re making this promise that Google doesn&#8217;t have to make, or Microsoft doesn&#8217;t have to make,” where is the tension in that? How does that express itself as you design the architecture of the products, which might preclude some opportunities?</strong></p>
+
+<p class="wp-block-paragraph">What could also be our corporate motto — it&#8217;s not, but it could be — is go big or go home. We certainly don&#8217;t set modest goals in that regard. But I think that there are a couple of things that make it different. I mentioned before a lot of constraints, but one thing I didn&#8217;t mention is that we don&#8217;t have VC investors. We don&#8217;t have private equity investors. We aren&#8217;t burning other people&#8217;s money with VCs breathing down our necks that we must exit soon, or otherwise we go belly up.</p>
+
+<p class="wp-block-paragraph">We built a sustainable business. We reinvest the profits from that business back into the business. And this insulates us from some of the pressure, which I&#8217;m sure OpenAI felt given that they were lighting enormous stacks of money on fire all the time, right? But that said, personnel is policy. I think that there&#8217;s certainly always this risk. At the same time, we found out a lot recently that sometimes rules, norms, or guidelines aren&#8217;t written. Unwritten or not, they&#8217;re not worth the paper that they&#8217;re written on.</p>
+
+<p class="wp-block-paragraph">But that&#8217;s also where the architecture comes in. We make choices about the tech stuff, and obviously I&#8217;m on the tech side of this business, but we have made choices, and some of that is for business competitive reasons, right? We want to sell products where we say, &#8220;We can&#8217;t access your data. We don&#8217;t have access to data. We can&#8217;t lose it. We can&#8217;t sell it. We can&#8217;t do this.&#8221;</p>
+
+<p class="wp-block-paragraph">But that also constrains us from deciding one day to turn around and sell it because we have locked it in a box, and we can&#8217;t access it, and therefore we can&#8217;t turn around and say, &#8220;You know what? Sorry guys, we changed our minds. We&#8217;re actually going to mine all this data and go.&#8221; Now, is anything perfect? No. But I mean, the structure is designed such that we have these interlocking, as I said, controls.</p>
+
+<p class="wp-block-paragraph">I think the other thing is that even if, say… The Proton Foundation is barred from selling Proton AG, as far as I&#8217;m aware, but even if, for some reason, something happens, the value of Proton is in the reputation. And we said this, and it has been a deliberate choice. The value of Proton is in the trust that we have. If Google bought us, it would have no value because Google does not have the credibility to run Proton. Do you see what I mean?</p>
+
+<p class="wp-block-paragraph"><strong>That&#8217;s just the default of Google buying anything. I just want to be very clear about that.</strong></p>
+
+<p class="wp-block-paragraph">[Laughs] No, they shut it down and then it&#8217;s gone, right?</p>
+
+<p class="wp-block-paragraph"><strong>The clock would start ticking that day.</strong></p>
+
+<p class="wp-block-paragraph">Yeah. I know. It&#8217;s happened before, it&#8217;ll happen again, I&#8217;m sure. But the Proton Foundation structure is designed to say that “No, the company cannot be sold to a buyer.”</p>
+
+<p class="wp-block-paragraph"><strong>That&#8217;s the macrostructure. Just tell me about the more tactical structure inside the company that&#8217;s building a product. How is Proton itself structured? Is there a team that makes the Lumo assistant? Is there a team that makes email? Is it divisions? Is it functional? How does that work?</strong></p>
+
+<p class="wp-block-paragraph">So we do have a division structure, a business unit structure. We have certain products that are bundled together, like mail and calendar, so they&#8217;re bundled into the same division. The others are separate. So we have Lumo, we have Drive, we have Pass, and we have VPN. These are separate divisions. You make choices about corporate structure based on what communication you want to be the easiest. So that&#8217;s designed to allow people to move fast and to have autonomy and make decisions within their product.</p>
+
+<p class="wp-block-paragraph">We also have cross-organizational teams, support teams, and things like that. And on that side, the trade-off of the business unit structure is that we sometimes have to work harder. It&#8217;s a little bit like corralling cats, right? Where you have to make sure that, “Okay, I&#8217;m building this feature that touches all the products. I need to make sure that all the products are on board and they have it in their planning so that we can ship them correctly.”</p>
+
+<p class="wp-block-paragraph">So you make decisions about that. We&#8217;ve made a deliberate decision to prioritize in-product communication. And then we try to compensate for the shortcomings of that in our cross-product communication. Then, as we transition to more and more ecosystem-based stuff, we may make different choices about the corporate structure to support that. The <a href="https://www.splunk.com/en_us/blog/learn/conways-law.html">whole Conway&#8217;s law thing</a>. You ship your org chart, but sometimes you want the best of both worlds, and this is where process comes along. It&#8217;s not always sexy, but you find it super important as you scale organizations, for sure.</p>
+
+<p class="wp-block-paragraph"><strong>You might be the first </strong><strong><em>Decoder</em></strong><strong> guest to make the connection directly between the fact that I ask everyone how their company is structured and you ship your org chart, which is why I always ask, because it&#8217;s the fundamental truth.</strong></p>
+
+<p class="wp-block-paragraph">You do, and we struggle with that to some degree. We try to compensate for it. But yeah, you do ship your org chart. And therefore, if you want your products to look different, you should adjust your org chart to support that difference, right? I mean, ultimately.</p>
+
+<p class="wp-block-paragraph"><strong>The other </strong><strong><em>Decoder</em></strong><strong> question I ask everybody is about decisions. You have a lot of decisions to make. You are trying to build a new kind of product architecture against a lot of the same constraints as your competitors. How do you make decisions? What&#8217;s your framework?</strong></p>
+
+<p class="wp-block-paragraph">How do I make decisions? We are a founder-led company. Andy started Proton. I was, I think, employee six, I want to say. That&#8217;s a funny story in itself. You know how I met Andy?</p>
+
+<p class="wp-block-paragraph"><strong>How&#8217;s that?</strong></p>
+
+<p class="wp-block-paragraph">He was my grad student at CERN. I was a postdoc at Harvard, and he was my grad student. And then he comes and finds me in Silicon Valley after I left physics and says, &#8220;Hey, you want to join my startup? You can be CTO.&#8221; Anyway, and here we are 11 years later.&nbsp;</p>
+
+<p class="wp-block-paragraph">But he&#8217;s still heavily involved. He has a lot of input on product direction strategy, and he&#8217;s a visionary. I think he&#8217;s responsible for a lot of Proton&#8217;s success. He&#8217;s willing to take risks, that kind of stuff. I obviously believe in his leadership, or I wouldn&#8217;t still be here after 11 years. That said, I think one thing that sometimes happens with visionaries is they need to surround themselves with people who will challenge them when they get maybe a little too far over their skis, or to also make sure that we have ideas from other places.</p>
+
+<p class="wp-block-paragraph">One thing that we really try to make sure of is that ideas are judged on their merits, not their origin necessarily. And so we have a senior leadership team whose job is to, yes, execute but also bring new ideas and sell them and things like this. I&#8217;m not going to say that we&#8217;re perfect in this because nobody is, and we have plenty of things that we can improve, but we try to push decision-making down the org. The whole point of an organization is that you have a way to align lots of different people in the same direction.</p>
+
+<p class="wp-block-paragraph">The trick is always: how do you get alignment in the same general direction while still having autonomy so that you&#8217;re not micromanaging everything? And I&#8217;m not saying we always get the balance right, but that&#8217;s the goal here. When we do this sort of orientation when we hire new people into Proton, one of the things we always say is: I want to hear… You&#8217;re not used to our way of doing things yet. So I want you to look at our way of doing things, and if you&#8217;ve experienced another employer or you think this is either crazy or inefficient, I want you to tell us. And we&#8217;re very clear, yes, of course we have a hierarchy, and part of this is our size, but we very rarely have more than, say, three or four levels of management.</p>
+
+<p class="wp-block-paragraph">We always say, &#8220;Look, if you need to ping me, you need to ping the CEO, you need to directly talk to people, just do it.&#8221; It&#8217;s another thing, and again, I&#8217;m speaking for myself, but I think this is common throughout Proton: I tell people, &#8220;I&#8217;m not promising or obligated to agree with you, but you&#8217;re never going to regret telling me what you think,” basically.</p>
+
+<p class="wp-block-paragraph">So we try to do that. And I credit Andy with this, but we have very little internal politics. Maybe this is just because we&#8217;re not very big yet, but we have zero tolerance for fiefdoms or internal politics, and that also makes things easier. There&#8217;s very much a sense that we&#8217;re all pointing in the same direction, and that it&#8217;s not my division that I&#8217;m trying to grow, it&#8217;s Proton in general.</p>
+
+<p class="wp-block-paragraph">I think that some of that comes with being a mission-driven company. I don&#8217;t know if you&#8217;ve ever had this experience, but for those of you who haven&#8217;t, I&#8217;ve had both. I was a physicist as part of the CERN collaboration a long time ago, and there you have the fundamental nature of the universe. I consider that a mission-driven occupation.</p>
+
+<p class="wp-block-paragraph">I also had a stint in Silicon Valley afterward, which had fun and interesting technical problems, but I missed that. And with Proton, the mission is really… We have to be careful that it doesn&#8217;t paper over organizational problems that we should really solve, let&#8217;s put it that way. But it really does make the job easier when everybody is aligned in that regard.</p>
+
+<p class="wp-block-paragraph"><strong>Let me ask you a question about that, and then I want to come to the pressures that Proton feels and how you put all of this structure into practice to resist those pressures. Early on in my career, I had no idea how to manage anyone. I went to a bunch of people and asked them a bunch of questions. One of the smartest mentors in all this sat me down and told me very seriously, &#8220;Look, you don&#8217;t hire people to make them like you. You hire people to change your organization.&#8221;</strong></p>
+
+<p class="wp-block-paragraph"><strong>I&#8217;ve taken that to heart, and maybe at 15 years into this, I&#8217;m like, &#8220;That&#8217;s actually a pendulum. You need people to buy into what you&#8217;re doing. Otherwise, every new person you hire is going to radically disrupt what everyone else is doing because they&#8217;re maybe over-empowered and they&#8217;re not actually on the same page.&#8221;</strong></p>
+
+<p class="wp-block-paragraph"><strong>Proton has a mission, right? You&#8217;re describing it as a mission-driven company. How do you strike that balance of wanting to hire new people and get the outside perspective on what you’re doing wrong and then not actually get knocked totally off track? Because it seems very important within a company like Proton.</strong></p>
+
+<p class="wp-block-paragraph">I mean, culture is extremely important. It&#8217;s extremely important. That comes from the top as well. Andy, if you were to ask him what the most important thing in any business is, he&#8217;s very likely to say culture. As a result, we try to be very careful about who we hire. We hire relatively slowly. I wish we could hire faster.</p>
+
+<p class="wp-block-paragraph">I think hiring is one of the things that we could be better at, but we don&#8217;t do these massive hires, massive layoffs, things like this because&#8230; And we don&#8217;t hire so fast that we dilute the culture. We want to integrate people into the Proton culture, not necessarily… And yes, sometimes we have to change it, sometimes we have to evolve it, but we want that to be done in a deliberate way.</p>
+
+<p class="wp-block-paragraph">I also had maybe a similar evolution as a manager. I&#8217;ve been there through all of Proton&#8217;s growth phases. So early on, I wrote a lot of code, and then I was effectively a team lead. Then I was a manager of managers. At some point, I was running all of Proton&#8217;s engineering. Then I handed off some of the management things, but kept the CTO technical direction stuff.</p>
+
+<p class="wp-block-paragraph">In that course, I definitely made a lot of mistakes too, right? Early on, I had to teach myself not to make other people like me, not to, maybe not micromanage, but not to just tell people what to do and have them execute it. And then I went through a phase later where I realized that, okay, people need to learn, people need to make their own mistakes. I want to import people with expertise; I&#8217;m not infallible. Let&#8217;s do this. That was probably too permissive. We had some… nothing catastrophic, but we had some expensive mistakes that I had a bad feeling about, but I let go through anyway. Because I was trying to do this.&nbsp;</p>
+
+<p class="wp-block-paragraph"><strong>That&#8217;s the worst.</strong></p>
+
+<p class="wp-block-paragraph">So I think moderation doesn&#8217;t tend to be the sexiest thing to sell, but it is. It&#8217;s a balance. You don&#8217;t want to mandate how things are done, but you also want to make sure that you&#8217;re there to stop people from making truly catastrophic or expensive decisions. You can see the brick wall in the distance, and you want to make sure that doesn&#8217;t happen. Yeah, it&#8217;s not the most dramatic answer, but a lot of this is finding the right balance there, moderation.</p>
+
+<p class="wp-block-paragraph"><strong>The reason I spent so much time on the technical and corporate structure side, as well as the culture, is that Proton faces a lot of pressure. And all of this, as you&#8217;ve described, is designed to resist that pressure and designed to build products that can&#8217;t be broken by that pressure in different ways. Let&#8217;s just start with, I don&#8217;t know, the governments of the world, which put a lot of pressure on Proton, and have found lots and lots of ways to get past the kinds of controls you put in place to protect user data.</strong></p>
+
+<p class="wp-block-paragraph"><strong>So we&#8217;ll just start with the splashiest one. In March, a </strong><a href="https://www.404media.co/proton-mail-helped-fbi-unmask-anonymous-stop-cop-city-protestor/"><strong>report from </strong><strong><em>404Media</em></strong></a><strong> found that Proton handed over the payment data of an account called Stop Cop City, which is located in the United States. They handed that data to the Swiss authorities, who then gave that data to the FBI, and that led to their identification. And this is metadata; I don&#8217;t think it&#8217;s actually the data, the contents of the emails.</strong></p>
+
+<p class="wp-block-paragraph"><strong>Proton&#8217;s argument is, &#8220;Look, we never actually gave anything to the FBI. We just complied with a legal request from the Swiss government.&#8221; Let&#8217;s start at the very basics. What is the Swiss government legally allowed to request from you? And does the fact that they can just serve as a proxy for the United States government undermine any of this trust or put any novel kind of pressure on your structures?</strong></p>
+
+<p class="wp-block-paragraph">So any company anywhere is going to have a jurisdiction and be subject to jurisdiction. No company or individual is above the law. And no company is going to go to jail for you. That said, you can arrange structures such that there are safeguards here. And our safeguard, for instance, is that we are a Swiss company. And we&#8217;ve actually been asked repeatedly, &#8220;Hey, can you just respond to requests from friendly government agencies?&#8221;</p>
+
+<p class="wp-block-paragraph">We have repeatedly said no because it can&#8217;t be our job to decide what is legitimate and what is not. That is not something that we can take on. So what we do is we engineer our products to have, within constraints, like making a product that people want to use and can use and does the job, but we engineer our products to be as private as possible.&nbsp;</p>
+
+<p class="wp-block-paragraph">We are subject to Swiss jurisdiction. Mutual Legal Assistance Treaty requests, MLAT requests, come in from governments. The Swiss authorities decide what is legitimate and what is not. We have no stake in that. And then they issue an order, we comply with those orders, and that&#8217;s the way it has to be. We very deliberately chose our jurisdiction in a way that the Swiss are famously neutral. Every government is made up of humans, but they have a reputation for being reasonable people, and that system has worked pretty well.</p>
+
+<p class="wp-block-paragraph">In general, there are countries that are less trustworthy than others, and those requests… We don&#8217;t have a lot of visibility into where the requests are coming from, but those requests we have on good authority are usually not honored. Whereas peoples’ opinions may vary these days, the FBI requests, they tend to be given a certain presumption of legitimacy, but they&#8217;re still evaluated by the Swiss authorities. And then what we do is we comply. We have no discretion here. And this would be the case for anything, but we have arranged the system such that we think it is one of the safest that can be constructed and stay legal.</p>
+
+<p class="wp-block-paragraph"><strong>So let me just ask you about that, because you are a systems person; you&#8217;re describing a system.</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>The failure point in that system, as you&#8217;re describing it to me, is that the Swiss government is going to make a bunch of decisions about what you have to comply with. The United States government, in this case specifically, I think, has realized that if they just say that everything is terrorism, the floodgates open on the mechanisms for data sharing.</strong></p>
+
+<p class="wp-block-paragraph"><strong>So in this case, this is an account called “Stop Cop City.” They said this is terrorism. Here in the United States, whether or not the government&#8217;s claims of everything being terrorism are legitimate or not, I think, is wide open for debate.</strong></p>
+
+<p class="wp-block-paragraph">Sure.</p>
+
+<p class="wp-block-paragraph"><strong>But it feels like they found what you would describe as an attack vector on the Swiss government&#8217;s mechanisms, where if you say these magic words, the Swiss government will come to you and start asking for metadata. Does that feel appropriate? Does that feel survivable?</strong></p>
+
+<p class="wp-block-paragraph">I think a lot of this stuff, at some point, is going to be up to people. We&#8217;ve done the best we can, and I don&#8217;t think… People are going to have different opinions about which requests are legitimate or not, but we&#8217;ve done the best we can in saying that, &#8220;Okay, the Swiss authorities will decide, and then we will comply with whatever they say because we are a Swiss jurisdiction.&#8221;</p>
+
+<p class="wp-block-paragraph">In the meantime, we do and can arrange — and, of course, there are laws that govern this — but we do whatever we can to minimize the amount of data that we can give. I mean, with payment data, we can encrypt it. We use payment processors. They can get it from lots of different sources. So if you have a credit card attached and there&#8217;s a legal request coming in, there&#8217;s not a whole lot we can do, right?</p>
+
+<p class="wp-block-paragraph">You mentioned systems… because I think this is important. What&#8217;s important to me, and I realize this… I don&#8217;t want this to sound callous for a specific hypothetical abusive case that might not have been&#8230; Mistakes can be made, of course. But I want a system like the system we have, which is that if the government has some sort of reasonable cause and can convince people in a defined process to give data, then yeah, the data should probably be given. What I really worry about is that we often live in a world where basically the government can instead ask, &#8220;Give me all your data, and I&#8217;m going to look for problems. I&#8217;m going to look for a crime.&#8221;</p>
+
+<p class="wp-block-paragraph">The word wiretap comes from a time when they had to literally go to your house and tap the wire. I don&#8217;t think it was really thought of at the time, but that — the actual physical act of having to do this — had a barrier to the fact that you couldn&#8217;t surveil everybody at once. It was simply logistically impossible. We live in a world today where you can surveil everybody, so we want to build services and systems where this is impossible, right? Where the default should be privacy, as I said, privacy by default.&nbsp;</p>
+
+<p class="wp-block-paragraph">Yes, we are also responsive to legitimate law enforcement requests, however you define legitimate. And that legitimate question will always be a matter of process, in which we, of course, are only one player in this process. But I think that&#8217;s the-</p>
+
+<p class="wp-block-paragraph"><strong>Well, there&#8217;s legitimacy, and there&#8217;s a market dynamic here. So the Swiss government has applied a lot of pressure to Proton in the last few years. They want you to basically have an unencrypted VPN and be able to decrypt user data that was traveling over VPN. I believe Proton has </strong><a href="https://www.vice.com/en/article/proton-says-it-will-leave-switzerland-if-controversial-swiss-law-passes/"><strong>threatened to leave Switzerland over this</strong></a><strong>, and then you announced that you were going to </strong><a href="https://www.reddit.com/r/ProtonMail/comments/1m8n3yv/proton_is_moving_most_of_its_physical/"><strong>build a more distributed infrastructure</strong></a><strong> and place some of that infrastructure in Germany and Norway.</strong></p>
+
+<p class="wp-block-paragraph"><strong>We&#8217;re going to come to Chat Control. Yesterday, I think the EU </strong><a href="https://www.wired.com/story/a-majority-of-european-lawmakers-voted-against-letting-big-tech-read-our-messages-theyre-going-to-anyway/"><strong>passed a version of this law</strong></a><strong>, and Proton&#8217;s response was, &#8220;We&#8217;ll just leave the EU. We&#8217;re going to take ourselves out of this legal jurisdiction.&#8221; I want to talk about that stuff in detail, but just in the sort of broader context that you&#8217;re talking about right now, you&#8217;re picking, right? You&#8217;re picking a foundation, and often the response is, &#8220;Well, if you change the legal foundation here, we will leave.&#8221;</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>How real is that?</strong></p>
+
+<p class="wp-block-paragraph">It&#8217;s dead serious. With all due respect to Swiss authorities and everybody else, I think it would be absolutely suicidal to continue down this path. I mean, part of the Swiss brand is privacy. It&#8217;s been that way for 80 years, and they have a good, via Proton largely, but also, they have a good case for bringing that reputation and those economic advantages — because there are a lot of businesses, a lot of commerce, that require confidentiality — to the 21st century, to the digital age. And throwing it away is, I think, shortsighted to say the least. But no, it&#8217;s a serious threat. The thing about digital services is that they can be moved. There&#8217;s a lot of flexibility in this.</p>
+
+<p class="wp-block-paragraph">I mean, I guess if we get truly dystopian, there may be a world where there&#8217;s no place to move to, but at the moment there are options. It&#8217;s certainly also… It&#8217;s a threat. I mean, it&#8217;s a real threat. We hope not to have to do it. We hope that the powers that be are responsive to this and change course, but yeah.</p>
+
+<p class="wp-block-paragraph"><strong>That&#8217;s a cost, right? I&#8217;m curious about this-</strong></p>
+
+<p class="wp-block-paragraph">It&#8217;s a cost. Well, it is a cost. We&#8217;ll have to do it, but it&#8217;s maybe not as much of a cost as you might think. We already have employees in different countries. We have satellite offices, and we have other things. We have data centers in Germany. We have data centers in Norway. Not to be too blasé about it, but we could do a corporate inversion to somewhere else and then say, &#8220;Okay, all the legal requests have to come through here.&#8221; And all the data is in-</p>
+
+<p class="wp-block-paragraph"><strong>How does that play with “you can&#8217;t sell it”? The part where you&#8217;re like, &#8220;It&#8217;s a Swiss foundation. It&#8217;s very hard to sell.&#8221; You want to leave Switzerland and reincorporate in Germany. Is the Swiss government going to stop you?</strong></p>
+
+<p class="wp-block-paragraph">I&#8217;m going to have to defer on that because I am not a lawyer. I have no idea, but I&#8217;m sure it&#8217;s possible.</p>
+
+<p class="wp-block-paragraph"><strong>I&#8217;m just curious because it feels like, at least as of this conversation, NATO still exists. Germany and Norway are still in the EU. There&#8217;s Swiss law, there&#8217;s German law, then there&#8217;s EU law. And the EU law is also getting increasingly intense about what they can scan and what they can&#8217;t scan.</strong></p>
+
+<p class="wp-block-paragraph"><strong>I mentioned Chat Control earlier. That&#8217;s the law in the EU that would </strong><a href="https://www.euronews.com/next/2026/07/10/chat-control-10-passed-the-european-parliament-through-the-back-door"><strong>require service providers to scan the contents of messages</strong></a><strong> for CSAM material and for other kinds of infringing material. That&#8217;s a big problem. I think Proton said, &#8220;We will just leave the EU if you make us do this. This is going to break the core promise.&#8221;</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>If you move to Germany and Norway, and then the EU passes the harshest version of Chat Control, are you geared up to leave?</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>How ready are you? Can you pull the switch tomorrow? Where would you go?</strong></p>
+
+<p class="wp-block-paragraph">I don&#8217;t know, I&#8217;d have to consult with other people for that. I&#8217;m not deep in that, but it&#8217;s a real threat. I know it&#8217;s a real threat. I know we&#8217;ve made some preparations about where we could possibly land for this if both the EU and Switzerland become inhospitable to this.</p>
+
+<p class="wp-block-paragraph">There are separate things. There are the practical challenges that we all know this stuff is happening. There&#8217;s a wave, whether it be age verification or breaking encryption or stuff like this, that seems to be in vogue right now, and it&#8217;s something we are fighting on the policy front. In my opinion, it&#8217;s very misguided. Hopefully, at some point, the fever breaks. You cannot brand a backdoor with an American flag and say that only good people can use it. It doesn&#8217;t work like that, or an EU flag or anything like that.</p>
+
+<p class="wp-block-paragraph">Maybe this comes a little bit back. So there&#8217;s the practical part. What do we do if this happens? What do we do if this happens? At the end of the day, governments hold a lot of power over policy, and you have to figure out how you can comply, or if you can&#8217;t comply, you leave, or you do something else. But there are a lot of countries in the world, and I think we will ultimately do what we have to.</p>
+
+<p class="wp-block-paragraph">The other part — just to, I guess, use your platform a bit to make the case — is that Chat Control, age verification, all this stuff, is a very bad idea. I don&#8217;t want to say… There are real threats to children online, and it&#8217;s not that we shouldn&#8217;t take them seriously, but there are ways to do this. We talked about systems thinking before and systems design. There are ways to do this that balance the appropriate concerns, that can gate mature material behind age gates that don&#8217;t reveal who you are.</p>
+
+<p class="wp-block-paragraph">Once you build a system that essentially abolishes anonymity online, how long before that system&#8230; I mean, it&#8217;s Chekhov&#8217;s gun. How long before somebody comes along to use it? If it&#8217;s built, somebody&#8217;s going to use it eventually for purposes that it wasn&#8217;t designed for.</p>
+
+<p class="wp-block-paragraph">How long until China says, &#8220;Hey, identify all the dissidents for me who are using this”? Because they have to use their ID for everything on the internet. So we want to build systems, internet systems, that can&#8217;t be commandeered like this. This is how we build Proton, but I think this principle applies to the larger internet.&nbsp;</p>
+
+<p class="wp-block-paragraph">This is a kind of thought experiment, right? I&#8217;m probably going to butcher this, but there was some crazy statistic that a huge fraction of East Germans were actually employed as informants by the Stasi on other East Germans in the height of the Cold War. And the Iron Curtain, of course, fell pretty much right before the dawn of the digital age, in some ways, the internet age.</p>
+
+<p class="wp-block-paragraph">I think you could argue — and I think you can look at counterexamples like China — that if some of the Eastern Bloc authoritarian regimes made it into the digital age, maybe they would have had enough control over information to not fall anymore because it&#8217;s so much easier to do this. So the fact that Facebook and Google, arguably with their ad ecosystems, have built the most sophisticated — okay, China’s is perhaps — but some of the most sophisticated surveillance systems ever built, but we do the most American thing ever with it, which is we use them to sell you crap you don&#8217;t need.</p>
+
+<p class="wp-block-paragraph">But that doesn&#8217;t mean that&#8217;s the only use for those, and the fact that those are sitting on the mantelpiece like Chekhov&#8217;s gun, waiting for somebody to pick them up and do something truly horrific with them, is a threat to free society. All this other stuff with Chat Control and age verification is the same thing. It&#8217;s saying, “We have this harm. Let&#8217;s build a system to prevent this harm that then can be used for really nefarious purposes.” We need to make sure that we don&#8217;t engineer systems that threaten the existence of a free society. Sorry, that was my soapbox speech, but it&#8217;s something I care deeply about.</p>
+
+<p class="wp-block-paragraph"><strong>The reason I asked you so much about the structure of the company and its culture and how the systems are built is that idealism is often expressed in Silicon Valley. I&#8217;ve heard it from all of the big companies that you have described. I hear it from big companies today, and then the compromises creep in.</strong></p>
+
+<p class="wp-block-paragraph"><strong>And sometimes the compromises are, &#8220;Well, we&#8217;re domiciled in the United States. We&#8217;re just going to have to listen. There&#8217;s nothing we can do. You can look at our warrant canary page to see how many legal requests we&#8217;re getting, and that&#8217;s going to be the answer.&#8221;</strong></p>
+
+<p class="wp-block-paragraph"><strong>Sometimes the compromises are, “Look, we have to grow. We have to get bigger, and that&#8217;s it.” And sometimes the compromises are “there&#8217;s no way to build the system that would protect people the way we want, and comply with the legal regimes.” I think encryption sits at the absolute heart of that tension.</strong></p>
+
+<p class="wp-block-paragraph"><strong>I&#8217;ll give the example of Apple because I think everyone is familiar with Apple. Apple routinely resists these calls for a backdoor. [The company] is big enough to do it in the ways that it can do it, and then the </strong><a href="https://www.theverge.com/news/609546/apple-iphone-ipad-usb-restricted-mode-zero-day-exploit-patch"><strong>iPhone gets zero day-ed anyway</strong></a><strong>. It doesn&#8217;t matter. That cycle repeats in a way that it repeats. But if you talk to the folks at Apple, they say, &#8220;Look, the regulators come to us, and they&#8217;re like, &#8216;Just be smart. Just do some smart stuff, smart guys, and find a way to do a backdoor that will preserve privacy.'&#8221; And Apple&#8217;s response is, &#8220;You cannot.&#8221;</strong></p>
+
+<p class="wp-block-paragraph">It&#8217;s impossible.</p>
+
+<p class="wp-block-paragraph"><strong>We cannot nerd hard enough to solve this problem for you. I think there&#8217;s some willful ignorance on the part of the regulators; I think the regulators know this. And then I think there&#8217;s a massive number of activists who want to protect children. Maybe they do understand it, maybe they don&#8217;t understand it, but what they certainly understand at a visceral level is the kids are being harmed, right?&nbsp;</strong></p>
+
+<p class="wp-block-paragraph"><strong>All of the other systems that everyone claims can ameliorate the problems or mitigate the risk to encryption do not actually exist, such that the kids are not being harmed at the rate they&#8217;re being harmed today. You sit in the middle of this. The governments of the world come to you. They&#8217;ve asked you for backdoors. They&#8217;ve asked you for client-side scanning of chat messages to detect CSAM. What&#8217;s your response to just be smart? Just nerd harder and figure it out?</strong></p>
+
+<p class="wp-block-paragraph">I mean, it&#8217;s impossible to create a backdoor that can only be used by the good guys. And the consequences of the backdoors being used by the bad guys are basically catastrophic, right? I think you mentioned there are still harms being perpetrated at these rates and that&#8217;d be-</p>
+
+<p class="wp-block-paragraph"><strong>Like at a massive scale. I do think it&#8217;s important to say that clearly. The harm is being perpetrated at a massive scale.</strong></p>
+
+<p class="wp-block-paragraph">I mean, the concerns are legitimate, right? But we tolerate a lot of harms. We tolerate ingesting things that aren&#8217;t good for you if you&#8217;re an adult, right? And this is maybe US-centric, but there have been several… I mean, I don&#8217;t know if it&#8217;s still a precedent with the way things are going, but there have been several court precedents that have basically said that… I think this actually has to do with scanning or otherwise; they have said that, “Okay, these must be compatible and balanced against restricting the freedom of adults, to essentially be very, very secure.”</p>
+
+<p class="wp-block-paragraph">You can make society very, very, very secure by taking away all freedom whatsoever. You can do that. And this is a trade-off of what we want to make, but I don&#8217;t think people fully internalize the fact that too much security is maybe a world that they don&#8217;t want to live in as well.</p>
+
+<p class="wp-block-paragraph">I think it was Ben Franklin, again, not to be too American, but people who would trade in freedom for security deserve neither. I&#8217;m paraphrasing. I am American. I live in Europe now, but I am originally American. There are a lot of people who really beat the drum of freedom in the US, but are willing to essentially give away all their privacy.&nbsp;</p>
+
+<p class="wp-block-paragraph">I think privacy and freedom are inextricably connected. You cannot be free without privacy. So I think there&#8217;s a trade-off to be made here, and we can discuss what the trade-off is, but the trade-off should not be that we make the entire system transparent to whoever wants to look.</p>
+
+<p class="wp-block-paragraph">Because there are some really bad people who want to look. And even if you think that the government will never be that bad person, which seems naive, but even if you think that&#8217;s the case, there are all kinds of cyber criminals everywhere else. Those backdoors or vulnerabilities — I guess vulnerabilities are easier than backdoors — but those vulnerabilities that have been found or introduced in cryptography have a long history of being exploited by bad actors. The history is clear. It&#8217;s impossible to have a backdoor that can&#8217;t be exploited except by the people for whom it&#8217;s intended. So I think there are other ways to do this, I think we need to-</p>
+
+<p class="wp-block-paragraph"><strong>Can you describe those other ways? I think maybe this is missing from the conversation. If there are other technical solutions to mitigate the harm, what would they look like?</strong></p>
+
+<p class="wp-block-paragraph">A lot of it would be getting in the weeds about how to do things.</p>
+
+<p class="wp-block-paragraph"><strong>Go ahead. That&#8217;s what this show is for.</strong></p>
+
+<p class="wp-block-paragraph">Sure. For instance, there&#8217;s such a thing as zero-knowledge proofs, which basically involve the ability to prove that I am over 18 without actually giving you any other information about it. There are actually multiple ways to do that, some of which don&#8217;t involve zero-knowledge proofs, but these are a far cry from… Discord, which <a href="https://www.pcgamer.com/gaming-industry/one-of-the-worst-case-scenarios-for-id-age-verification-is-already-here-with-a-discord-breach-compromising-some-users-data/">got in trouble, I forget, a month or two ago over having a security breach</a> where they did age verification and then they had — I forget what it was — some sort of open [AWS] S3 bucket or something with tons of people&#8217;s IDs and stuff.</p>
+
+<p class="wp-block-paragraph">This is not the right way to do it. But I guarantee you that people will do this wrong. If every website has to collect your ID, we are in deep [trouble]. So there are ways to have issuers have, say, a trusted person issue you an ID. It can be a local credential. It can be a credential. It can also be a credential that&#8217;s stored in the cloud, but in an encrypted way so the server can&#8217;t see what the credential is and then have your device selectively disclose, say, that the age is over 18, if the site that you go to requires that.</p>
+
+<p class="wp-block-paragraph">It doesn&#8217;t have to be, “This is your address, this is your name, this is whatever.” It can just be, oh yes, this person has a cryptographically signed affidavit that says age over 18, let them in.</p>
+
+<p class="wp-block-paragraph"><strong>That&#8217;s a technical solution to a regulatory demand, right? Do you think that the technical solution has to be written into the regulation, or is there to be some regime of “this is how to do it the right way”? Or do you think the industry has to come together and say, “We&#8217;re going to do zero-knowledge proofs”?</strong></p>
+
+<p class="wp-block-paragraph">No, I think it certainly helps if the industry comes together. There&#8217;s an EU ID initiative, which is actually fairly good. It&#8217;s not zero knowledge, but it&#8217;s fairly good. There are some problems with this kind of credential. Obviously, digital credentials can be copied, so you want to make sure that they don’t get copied and posted on the internet and used by a million people. So there are some anti-abuse trade-offs, right? You don&#8217;t want one guy&#8217;s ID from some country being used by every teenager in the US.</p>
+
+<p class="wp-block-paragraph"><strong>I would&#8217;ve been that teenager, just to be 100 percent clear. I would&#8217;ve absolutely been that teenager.</strong></p>
+
+<p class="wp-block-paragraph">[Laughs] Yeah, for sure. I think in general, the timescales are just so different. The history of writing exact solutions into regulatory frameworks is pretty dismal. But I think that the laws that do this could write things in ways that mandate privacy protections in a way that I think has not been done.</p>
+
+<p class="wp-block-paragraph"><strong>That would lead to the technical solution. This is what I&#8217;m asking. The government says, &#8220;Look, you have to start doing age verification. The kids are looking at all kinds of weird stuff online. We have to start gating some of this content the way that we gate, I don&#8217;t know, porn stores physically.”</strong></p>
+
+<p class="wp-block-paragraph">Right.</p>
+
+<p class="wp-block-paragraph"><strong>“Or we gate R-rated movies. Okay, we&#8217;ve got to do it.” And the industry is going to inevitably pick the cheapest solution; we&#8217;re just going to store driver&#8217;s licenses in S3 buckets.</strong></p>
+
+<p class="wp-block-paragraph">Sure. Or they&#8217;re inevitably going to pick the solution that allows them to market that information in some way, right?</p>
+
+<p class="wp-block-paragraph"><strong>You sit in the middle of it. Your ideals and your structure prevent you from doing the cheapest, worst version of this.</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>How do you make the industry match your values? Is it that the regulator mandates the solution, which you seem to think is a bad idea? Is it that they put constraints on the solution, which leads everybody to do the right thing? Where does that come from?</strong></p>
+
+<p class="wp-block-paragraph">Oh, this is a tricky one. If I knew the answer, I would be pushing it. But I think partnerships are one of them. I think certainly regulatory guidelines about what you can store, what you can&#8217;t store, and how much you can know about your customers are probably key. I think this gets into maybe competition stuff a little bit, but a lot of potential harm also comes from full vertical integration of a lot of stuff.</p>
+
+<p class="wp-block-paragraph">So mandating that things be separate entities, and thus, I&#8217;m not going to flush that out in this talk, but this can do a lot to prevent certain types of harms and temptations to abuse stuff. But I think regulation and having privacy requirements in the regulations is certainly the first step. And those compliant implementations there at least have that baked in.</p>
+
+<p class="wp-block-paragraph">I think also, this is again hard to do, but pushing it on the operating system manufacturers can also be kind of dangerous because it helps entrench those choke points. We already have a lot of choke points for Google, and Apple has these-</p>
+
+<p class="wp-block-paragraph"><strong>It&#8217;s funny. Apple really is pushing against this, but Apple loves to be entrenched as a choke point. Why do you think they&#8217;re </strong><a href="https://www.theverge.com/tech/942761/apple-texas-age-verification-app-store"><strong>pushing against being the age verifier</strong></a><strong>?</strong></p>
+
+<p class="wp-block-paragraph">That&#8217;s a good question, I don&#8217;t actually know. You&#8217;d think that they would jump at it, right? I mean, they certainly love being the choke point of the App Store and charging everybody 30 percent.&nbsp;</p>
+
+<p class="wp-block-paragraph"><strong>I know </strong><a href="https://www.theverge.com/news/693181/proton-is-joining-a-class-action-lawsuit-against-apple"><strong>you have been in a fight</strong></a><strong>.</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>Proton has been in a fight with Apple over App Store policies. This seems like one where their interest would be obvious to say, &#8220;Actually, we will maintain control. This 30 percent, stop bothering us about the 30 percent, regulators, because we will provide you with age verification.&#8221;</strong></p>
+
+<p class="wp-block-paragraph">Yeah. I mean, I think they might view it as simply a no-win game in the sense that you can KYC, or know your customer, as hard as you want, but there&#8217;s going to be some that slip through, and then you&#8217;re responsible. So maybe they just want a third party to do it, so that&#8217;s not their problem, right? I don&#8217;t know.</p>
+
+<p class="wp-block-paragraph"><strong>That might be the whole answer.</strong></p>
+
+<p class="wp-block-paragraph"><strong>Let me ask you this. We talked about age verification. I&#8217;m not sure there&#8217;s an answer that will solve every problem, but you&#8217;ve laid out some technical approaches that will at least balance the harms.&nbsp;</strong></p>
+
+<p class="wp-block-paragraph"><strong>When I said that harm is happening at a massive scale, what I meant was CSAM — what I meant is child sexual abuse material. That is happening at a massive scale over the internet. We all know it. There are lots and lots of ways to mitigate it. And then there are just platforms we can&#8217;t see into, where it&#8217;s going to happen anyway. Proton is one of them. iMessage is actually another, if you fully encrypt iMessage. Apple gets a lot of criticism for that.</strong></p>
+
+<p class="wp-block-paragraph"><strong>Apple’s response is the same as Proton&#8217;s: “There&#8217;s no way to do this. We simply cannot give you a way to do this that does not create backdoors for all the other bad actors. You want it, we&#8217;re not going to do it.”</strong></p>
+
+<p class="wp-block-paragraph"><strong>What are the solutions to mitigating the harms of CSAM without creating backdoors? Because I feel like that is also missing from this conversation, especially when I talk to the activists who are laser-focused on the scale of the harm.</strong></p>
+
+<p class="wp-block-paragraph">So I can&#8217;t describe exactly what Proton does because anti-abuse is one of the things where security through obscurity really does actually help. It helps that the bad actors don&#8217;t know what we do. But I can say that you can fight CSAM without content scanning. It is possible.</p>
+
+<p class="wp-block-paragraph">A lot of that is&#8230; Anyway, I probably shouldn&#8217;t say it, but you can fight CSAM. I&#8217;m not saying it&#8217;s the same. It&#8217;s not as effective as scanning everything, but also in the age of AI image generation, who knows what&#8217;s real or not. Not that AI-generated CSAM is good, but the point is you don&#8217;t know if there&#8217;s a real victim, is there not, et cetera.</p>
+
+<p class="wp-block-paragraph">So I think that there are alternative things to scanning every image that you can do to fight CSAM. And we&#8217;ve done this for years, and it&#8217;s hard to know how effective we&#8217;ve been at it because we don&#8217;t really know what the denominator is. We have been, I think, at least in terms of networks that we&#8217;ve identified: we&#8217;ve identified something, and we&#8217;ve shut them down, and we&#8217;ve mitigated this.</p>
+
+<p class="wp-block-paragraph">We have a strong interest in keeping bad actors of all kinds off the platform because our goal is… The mission&#8217;s not going to be served if it&#8217;s “Oh, this is a platform for criminals.” And as a result, it&#8217;s not. I mean, for the vast majority of Proton users… We put nearly 10 percent of the total company resources into fighting abuse. We are dead serious about making abuse as little as possible on the platform. So it can be done.</p>
+
+<p class="wp-block-paragraph">It&#8217;s a cost center. It&#8217;s a cost center, and one that we eat. It doesn&#8217;t make us any money, but it can be done. I think the other thing is, and this is not only CSAM, but the fact that the digital sphere isn&#8217;t the only place where these crimes are committed. There&#8217;s the physical sphere too. There are the actual victims. There are actual people harmed by this. I think everybody wants their job to be easier. Cops are not exempt from this. So they would love to scan everything on the internet, and I don&#8217;t actually blame them for this request because it would make their jobs much easier, and they really do want to reduce harm.</p>
+
+<p class="wp-block-paragraph">However, I think we do need to make a trade-off between that and the threat that is to free society as well. So I think that there&#8217;s probably more that can be done in the sort of physical space as well to fight these kinds of abuse with resourcing and whatnot. But I will say, and I&#8217;ll repeat it, content scanning is not the only way to do this. There&#8217;s also some content scanning that can be done without violating. It can be client-side; it can be other things. It can be done in secret. In some ways, this is very fraught, too, but there are things that can be done to do this that don&#8217;t violate privacy at a massive scale, which is a price that I think is simply too high.</p>
+
+<p class="wp-block-paragraph"><strong>You&#8217;re saying there&#8217;s a system you can&#8217;t quite describe that is effective at stopping the harms of CSAM at scale. Is that verifiable from some of the people who wish to impose the regulations? Is it auditable? Security through obscurity has these problems, right? We have to trust you. A lot of this conversation has come back to how much we can trust Proton structurally and personally.</strong></p>
+
+<p class="wp-block-paragraph">The problem is I don&#8217;t know what the denominator is. I don&#8217;t know if we found 50 percent of them; I don&#8217;t know if we found 10 percent of them. I don&#8217;t know if we found one percent of them, because all I know is the stuff we found. Even then, it&#8217;s probabilistic. We don&#8217;t see the images. We don&#8217;t know sometimes. Sometimes we have a better clue, but I won&#8217;t say how. But we don&#8217;t see the images in any case. We are not legally capable of doing that, and God knows we don&#8217;t want to subject our employees to that anyway.&nbsp;</p>
+
+<p class="wp-block-paragraph">But no, we don&#8217;t know what the denominator is, so I don&#8217;t know how effective it is. I do know that we can correlate this to some degree with the kind of legal requests we get, and that those are pretty few and far between.&nbsp;</p>
+
+<p class="wp-block-paragraph">I would think that if this were a massive problem on the platform, we would get a lot more legal requests for metadata regarding this and stuff like this. And that is our proxy, not for CSAM in particular because we often don&#8217;t know where the requests come from, but in general, one of our proxies is, “Okay, how many legal requests are we getting for data?” As opposed to how good we are at anti-abuse. If legal requests go through the roof, which they haven&#8217;t, then obviously we have a big problem with anti-abuse, and that has not been the case.&nbsp;</p>
+
+<p class="wp-block-paragraph">So I know that&#8217;s a wishy-washy answer, but that&#8217;s the problem. The data is private. We can&#8217;t read it. That&#8217;s our entire thing. We also have a reporting system, of course. People make mistakes like anyone else. So if they share an image, which can be reported, that can go. So there are lots of mechanisms. Again, I&#8217;m tiptoeing around saying any details because I don&#8217;t want this stuff to become ineffective. But we do a good job, I think, relative to external indicators that we can see.</p>
+
+<p class="wp-block-paragraph">I&#8217;ll give you an example where it&#8217;s not CSAM, but it&#8217;s a similar thing, okay? We used to get a lot of requests, relatively speaking, a lot of requests for ransomware accounts because people would go to Proton. Get a Proton email that they would, I don&#8217;t know, [link] with a Bitcoin something, right? Whatever. We would get this in the legal requests. We&#8217;d be able to look at that and say, &#8220;Oh, that&#8217;s definitely a ransomware account for various reasons.&#8221;</p>
+
+<p class="wp-block-paragraph">We got really, really good at killing ransomware accounts. Now, we still occasionally will get [requests about] them, but they&#8217;ll have been disabled by us for abuse six months before we get the legal request. I&#8217;m using ransomware as an analogy, but we do have a feedback loop to know how good we are.</p>
+
+<p class="wp-block-paragraph"><strong>So there&#8217;s something in your system, there&#8217;s some set of indicators that you can detect, and you&#8217;re just not going to tell me what they are. But there&#8217;s some set of indicators of how an account operates in your system that lets you know what it&#8217;s being used for?</strong></p>
+
+<p class="wp-block-paragraph">Yes.</p>
+
+<p class="wp-block-paragraph"><strong>Has any government ever asked you what that set of indicators is?</strong></p>
+
+<p class="wp-block-paragraph">No.</p>
+
+<p class="wp-block-paragraph"><strong>Interesting. Hopefully, that doesn&#8217;t happen today. Cops, if you&#8217;re listening, forget that you heard any of this. We&#8217;re running out of time here. I do want to quickly, at the end, ask about AI. Because we&#8217;ve talked about systems and dynamics that I think are pretty familiar. I came up on Usenet and Slashdot, and I probably heard that quote about liberty and security 10,000 times. That is the foundation of my life on the internet.</strong></p>
+
+<p class="wp-block-paragraph">[Laughs] Sure.</p>
+
+<p class="wp-block-paragraph"><strong>This debate, from, I don&#8217;t know, the &#8217;80s and &#8217;90s up until now, is the same. And maybe AI is going to flip over the whole apple cart. We can now do cybersecurity at scale in ways that governments are stepping in and stopping the models from shipping. Whether or not that is correct, that is the thing that is actually happening in the world.</strong></p>
+
+<p class="wp-block-paragraph"><strong>We can generate vast amounts of synthetic data that might trip all your detection systems, whether or not any harms are actually downstream of that data. You&#8217;ve shipped an AI assistant because a bunch of countries do not want to rely on American model companies, and having data sovereignty in Europe is important to them. That seems like a market opportunity for you.</strong></p>
+
+<p class="wp-block-paragraph"><strong>What is your approach to all of this? Are you reliant on the AI model? Are you reliant on frontier companies? Are you building your own model? How do you protect your data from them? All of this at the very end feels like it upsets, in significant ways, the structures and the systems we&#8217;ve been describing up until now.</strong></p>
+
+<p class="wp-block-paragraph">I think I&#8217;m not quite as concerned. I don&#8217;t think it&#8217;s had as much of a dramatic effect on the topics that we&#8217;ve discussed, maybe. We have Lumo, our own internal, which is run. We control the systems that it&#8217;s running on, and we want to be independent of third-party models and things like that.</p>
+
+<p class="wp-block-paragraph"><strong>Is that actually a model you&#8217;ve trained, or is that reliable?</strong></p>
+
+<p class="wp-block-paragraph">No, it&#8217;s open-source models that we&#8217;ve compiled. And it&#8217;s a collection of open-source models that we stitched together based on their strengths and weaknesses. But yeah, we don&#8217;t have a billion dollars to set on fire to train our own models. This is actually why we might be one of the few AI companies that actually make money doing AI, because we don&#8217;t do any training, right? We sell the inference. Not that there&#8217;s not a lot of work involved in building Lumo, but yeah, we don&#8217;t train our own models.</p>
+
+<p class="wp-block-paragraph">I guess there are two different sides. There&#8217;s the “how is AI going to affect the industry in general?” and maybe “how it&#8217;s affected us and how we use it.” So for a lot of our stuff, in particular the client-side stuff, it is open source. The client-side stuff is not user secrets either. So we&#8217;ve tried models from Anthropic and ChatGPT. We&#8217;ve also tried Lumo with OpenAI because, at the end of the day, a lot of it is public anyway, and it&#8217;s not user secrets, so we&#8217;re going to use the best tool to make us go as quickly as possible.&nbsp;</p>
+
+<p class="wp-block-paragraph">It has changed software engineering, probably permanently, in terms of the amount of time spent on actually writing code versus the other things. But maybe not so fundamentally. I mean, people talk about this SaaSpocalypse thing that every company&#8217;s going to be writing their own enterprise software. Personally, I just don&#8217;t buy it.</p>
+
+<p class="wp-block-paragraph">There&#8217;s a very big difference between being able to cook up your own custom purchase order software, ERP, or whatever that works for your small business, maybe sort of, and then the kind of things that — whether it&#8217;s compliance, whether it&#8217;s scaling, whether it&#8217;s reliability, all these things which enterprises need that you&#8217;re not going to&#8230; I mean, I just cannot see every company building [their own]. “Oh, software is dead. We&#8217;re not going to have vendors to do this that can promise us things that we need.”</p>
+
+<p class="wp-block-paragraph">I don&#8217;t know if I&#8217;m answering your question here, but the other thing about this is that, to me, if anything, it&#8217;s shifted what is valued in software engineering toward more senior-level skills, perhaps. But it&#8217;s not fundamentally changed what good software is, or how to architect good software. If anything, things like reviewing other people&#8217;s code… Well, today you&#8217;re reviewing other people&#8217;s code, and you&#8217;re reviewing the robot&#8217;s code, but it&#8217;s kind of the same skill.</p>
+
+<p class="wp-block-paragraph">So maybe the balance before was a little more towards, okay, can you write code very quickly, accurately with this kind of thing? Where now it&#8217;s like, okay, it&#8217;s more towards, can you review code very quickly? Which is maybe a more senior-level skill. But it&#8217;s still part of the software engineer toolkit: designing good software, what good software means, what good software looks like.</p>
+
+<p class="wp-block-paragraph">One thing that we&#8217;ve found, I think, is that LLMs work a lot better when your code is well-architected. If your code is well-designed, the LLM will actually work better. If your code is a spaghetti mess, the LLM will not work as well because they&#8217;re logic engines. There are more chances for them to get confused. So a lot of the fundamentals of building software — yes, the industry has changed — but a lot of the fundamentals of building software are different.&nbsp;</p>
+
+<p class="wp-block-paragraph">The other thing we found is that the time you spend writing code has gone down. Now, there are other bottlenecks in your pipeline that you have to address. Now maybe your [continuous integration] takes too long. Now maybe your other things take too long. So it may change what kinds of things you need to optimize, but at the end of the day, I think for most senior software engineers, the amount of time that they actually spent writing code was frankly not the hardest part of their job or what they spent most of their time on.</p>
+
+<p class="wp-block-paragraph">I think software is probably the most affected industry and the most tractable industry for LLMs that I&#8217;ve seen, at least so far. Obviously, there are other uses for it, but it&#8217;s software; it&#8217;s rule-based. You can test for correctness. You can mitigate a lot of the things that LLMs might go off the rails and hallucinate. At the end of the day, you need working code, right? So you can test this kind of stuff.&nbsp;</p>
+
+<p class="wp-block-paragraph">You can mitigate a lot of the problems with LLMs. Software is your best-case scenario. And even then, from what I&#8217;ve seen, it&#8217;s an evolution. It&#8217;s not a revolution. It&#8217;s definitely a big change, but it&#8217;s largely a productivity change, not “dump everything, start over.” Maybe I&#8217;m wrong about that. And maybe as models improve, it&#8217;ll get more and more dramatic. But at the moment, it&#8217;s a hell of an opportunity for productivity. I think — and software is what I know best — the fears are a little overblown.</p>
+
+<p class="wp-block-paragraph"><strong>Let me ask you on the other side of that. You mentioned earlier that now it is possible to look at all the emails and do mass surveillance. Anthropic rolled up to the United States government like, “You can do this with our model. We don&#8217;t want you to because we don&#8217;t actually think it&#8217;s good enough, and we think there are real problems with doing that.”&nbsp;</strong></p>
+
+<p class="wp-block-paragraph"><strong>You&#8217;re faced with that as well, right? You have your own internal AI model. Your users are probably generating more data inside of your systems than ever before with AI. It just seems like a thing that happens when you add AI to a system. The models get better when you feed them more data. They have a voracious appetite for data.</strong></p>
+
+<p class="wp-block-paragraph"><strong>That&#8217;s a lot of pressure on “we&#8217;re going to keep everything private.” It&#8217;s a lot of pressure on who gets to see your stuff, why they get to see it, and what they can do once they have it. And the value of having it seems to be going up. The value of collecting all the data seems to be going up.</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>How do you respond to that, even as you have to roll out AI systems in order to compete with the big tech that is putting it literally everywhere?</strong></p>
+
+<p class="wp-block-paragraph">I think this comes down to what I mentioned before: privacy is control. Privacy is self-determination in the sense that you control your data, and you control who it&#8217;s shared with. And maybe that “who” is an AI system, and that&#8217;s okay.&nbsp;</p>
+
+<p class="wp-block-paragraph">I think as long as this is an opt-in thing from the user… This is actually an internal debate, but we already have features. For instance, okay, we have a mailing list feature. Okay? I promise this has something to do with AI, with learning.</p>
+
+<p class="wp-block-paragraph"><strong>[Laughs] It&#8217;s a big build; here we go.</strong></p>
+
+<p class="wp-block-paragraph">But we have a mailing list feature, and that feature is done in a way that it is private. I send you an email, or send the mailing list an email, and it sends the email to everybody else. The system doesn&#8217;t see it. But if you want people outside Proton on your mailing list, then we can&#8217;t do end-to-end encryption anymore. We have to turn it off.&nbsp;</p>
+
+<p class="wp-block-paragraph">So when you add external people to your mailing list, you are prompted, &#8220;Hey, if you want to turn on external recipients, you need to turn off end-to-end encryption.&#8221; The user says yes, because that&#8217;s part of their workflow. They need it. At that point, we still don&#8217;t save a copy.</p>
+
+<p class="wp-block-paragraph">Everything saved on Proton is encrypted at rest. However, we do have a clear text email going through our system because we need to send it out to whoever the external recipients are, right? That&#8217;s the kind of model I see in the future with some of these. It&#8217;s not just AI systems; it&#8217;s also integrations where — and especially as we get more into business clients and stuff — I need this integration into my CRM, right? I&#8217;m going to choose to share this mailbox with my CRM. That&#8217;s okay. That can be a decision, and it&#8217;s our job to build a user interface that communicates what the consequences of that are.</p>
+
+<p class="wp-block-paragraph">But privacy is fundamentally… It’s not about not sharing stuff. It&#8217;s not about not sharing your photos; it&#8217;s not about not sharing your data with third parties. It&#8217;s about sharing the data with third parties that you choose, and not just by default with everybody. That has been sort of the big tech paradigm for Web 2.0 or whatever you want to call it, the last two decades.</p>
+
+<p class="wp-block-paragraph">So I think we can reconcile this with the Proton thing because it was never just about the encryption. The encryption is a tool to the end. It&#8217;s all about, hey, the fact that I stored data on somebody else&#8217;s computer on the internet does not mean that I give them control to do whatever they want with it, or that I trust them not to lose it. So we&#8217;re going to try and build a system where I retain that control, and I can still participate in modern online services, right?</p>
+
+<p class="wp-block-paragraph"><strong>I feel like we&#8217;re going to have to have you back soon to see how that&#8217;s all put to the test. This is new.</strong></p>
+
+<p class="wp-block-paragraph">Yeah.</p>
+
+<p class="wp-block-paragraph"><strong>I feel like in the next couple of years, we&#8217;ll find out more, so we&#8217;ll have you back soon. You&#8217;ve given us so much extra time. Bart, thank you so much for being on </strong><strong><em>Decoder</em></strong><strong>.</strong></p>
+
+<p class="wp-block-paragraph">Thank you. Thank you so much; it was a blast. I appreciate it.</p>
+
+<p class="wp-block-paragraph"><em><sub>Questions or comments? Hit us up at decoder@theverge.com. We really do read every email!</sub></em></p>
+							
+											
+				</article></body></html>
