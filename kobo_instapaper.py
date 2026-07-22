@@ -54,6 +54,12 @@ SIZZLE_CHARCOAL = (48, 48, 48)
 SIZZLE_PINK = (240, 56, 112)
 SIZZLE_CORAL = (248, 104, 112)
 SIZZLE_CYAN = (104, 200, 232)
+
+# Sampled from The Verge's own social-share card (2026-07-22) for the Top
+# Stories digest's OG image.
+VERGE_PURPLE = (80, 0, 248)
+VERGE_LAVENDER = (200, 176, 248)
+
 FONT_DIR = "/System/Library/Fonts/Supplemental/"
 
 C_ENCODED = "{http://purl.org/rss/1.0/modules/content/}encoded"
@@ -209,7 +215,7 @@ def verge_items(claimed):
             # item has no link.
             items.append({"id": e["aid"], "page_title": e["title"], "body": e["body"],
                           "link": e["link"],
-                          "ip_title": f"{e['title']} | Verge:{section}",
+                          "ip_title": f"{section.upper()}: {e['title']}",
                           "site_name": "The Verge", "dt": e["dt"]})
     return items
 
@@ -249,9 +255,13 @@ def verge_top_stories_digest(claimed, added):
 
     short = f"The Verge - Top Stories - {today.day}/{today.month}"
     marker = f"verge-digest-{today.isoformat()}"
+    base = f"verge-top-stories-{today.isoformat()}"
+    img_url = f"{PAGES_BASE}/{base}.png"
     return {
-        "fname": f"verge-top-stories-{today.isoformat()}.html",
-        "html": make_digest_page(today, todays),
+        "fname": f"{base}.html",
+        "html": make_digest_page(today, todays, og_image=img_url),
+        "img_fname": f"{base}.png",
+        "img": make_verge_digest_og_image(today, len(todays)),
         "needs_add": marker not in added,
         "count": len(todays),
         "ip_title": short,
@@ -319,7 +329,7 @@ def make_page(item):
             f"</head><body><article><h1>{t}</h1>{item['body']}</article></body></html>")
 
 
-def make_digest_page(date, entries):
+def make_digest_page(date, entries, og_image=None):
     """Render a day's Top Stories digest from its entries, oldest first, each
     keeping a link back to the real article."""
     heading = f"The Verge - Top Stories - {date.strftime('%A')} {ordinal(date.day)} {date.strftime('%B')}"
@@ -329,7 +339,7 @@ def make_digest_page(date, entries):
         title = html.escape(e["title"])
         link = html.escape(e["link"], quote=True)
         sections.append(f"<h2>{title}</h2><p><a href=\"{link}\">Read on theverge.com</a></p>{e['body']}")
-    og_img = first_image(entries[0]["body"]) if entries else ""
+    og_img = og_image or (first_image(entries[0]["body"]) if entries else "")
     og = (f"<meta property='og:image' content=\"{html.escape(og_img, quote=True)}\">"
           if og_img else "")
     return (f"<!DOCTYPE html><html><head><meta charset='utf-8'><title>{t}</title>"
@@ -375,6 +385,30 @@ def make_sizzle_og_image(item):
     draw.text((84, 355), date_line, font=sub_font, fill=SIZZLE_PINK)
     if issue_line:
         draw.text((84, 405), issue_line, font=sub_font, fill=SIZZLE_CORAL)
+
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def make_verge_digest_og_image(date, count):
+    """Render a 1200x630 OG card for the Top Stories digest, matching The
+    Verge's own social-share card style (colors sampled 2026-07-22: brand
+    purple #5000F8, bold white wordmark)."""
+    W, H = 1200, 630
+    img = Image.new("RGB", (W, H), VERGE_PURPLE)
+    draw = ImageDraw.Draw(img)
+
+    brand_font = ImageFont.truetype(FONT_DIR + "Arial Bold.ttf", 52)
+    title_font = ImageFont.truetype(FONT_DIR + "Arial Black.ttf", 92)
+    sub_font = ImageFont.truetype(FONT_DIR + "Arial Bold.ttf", 38)
+    date_line = f"{date.strftime('%A')} {ordinal(date.day)} {date.strftime('%B')}"
+    count_line = f"{count} stor{'y' if count == 1 else 'ies'} today"
+
+    draw.text((80, 110), "THE VERGE", font=brand_font, fill=VERGE_LAVENDER)
+    draw.text((78, 190), "Top Stories", font=title_font, fill=(255, 255, 255))
+    draw.text((84, 320), date_line, font=sub_font, fill=(255, 255, 255))
+    draw.text((84, 368), count_line, font=sub_font, fill=VERGE_LAVENDER)
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
@@ -517,6 +551,7 @@ def main():
         staged.append((it, f"{PAGES_BASE}/{fname}"))
     if digest:
         pages.append((digest["fname"], digest["html"]))
+        pages.append((digest["img_fname"], digest["img"]))
         digest_url = f"{PAGES_BASE}/{digest['fname']}"
         if digest["needs_add"]:
             staged.append((digest["item"], digest_url))
