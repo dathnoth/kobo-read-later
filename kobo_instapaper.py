@@ -22,6 +22,7 @@ import base64
 import glob
 import hashlib
 import html
+import io
 import json
 import os
 import re
@@ -35,6 +36,8 @@ from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from uuid import uuid4
 
+from PIL import Image, ImageDraw, ImageFont
+
 HOME = os.path.expanduser("~")
 SITE = os.path.join(HOME, "koboRss")
 PAGES_BASE = "https://dathnoth.github.io/kobo-read-later"
@@ -43,6 +46,15 @@ CONFIG = os.path.join(HOME, ".config/feeds-to-instapaper/config.toml")
 UA = "Mozilla/5.0 the-kobo-instapaper/1"
 WINDOW_DAYS = 2  # only ever save items published within the last N days
 RETAIN_DAYS = 7  # keep published pages live this long (Kobo fetches at download time)
+
+# Sampled from thesizzle.com.au's own logo (2026-07-22) so the generated OG
+# card matches their branding instead of using generic colors.
+SIZZLE_CREAM = (250, 248, 244)
+SIZZLE_CHARCOAL = (48, 48, 48)
+SIZZLE_PINK = (240, 56, 112)
+SIZZLE_CORAL = (248, 104, 112)
+SIZZLE_CYAN = (104, 200, 232)
+FONT_DIR = "/System/Library/Fonts/Supplemental/"
 
 C_ENCODED = "{http://purl.org/rss/1.0/modules/content/}encoded"
 ATOM = "{http://www.w3.org/2005/Atom}"
@@ -328,29 +340,74 @@ def make_digest_page(date, entries):
             f"</head><body><article><h1>{t}</h1>{''.join(sections)}</article></body></html>")
 
 
+def flame_points(cx, cy, w, h):
+    """Points for a flame-shaped polygon, echoing the wordmark in the real
+    Sizzle logo (a stack of these in pink/coral/cyan forms the icon)."""
+    norm = [
+        (0.50, 0.00), (0.68, 0.22), (0.82, 0.42), (0.74, 0.62),
+        (0.62, 0.74), (0.50, 1.00), (0.38, 0.74), (0.26, 0.62),
+        (0.18, 0.42), (0.32, 0.22),
+    ]
+    return [(cx - w / 2 + x * w, cy - h / 2 + y * h) for x, y in norm]
+
+
+def make_sizzle_og_image(item):
+    """Render a 1200x630 OG card for a Sizzle issue: the real logo's flame
+    icon (sampled colors, 2026-07-22) plus the issue's date/number, so link
+    previews get something distinctive instead of every issue sharing the
+    one static logo image the feed body happens to embed."""
+    W, H = 1200, 630
+    img = Image.new("RGB", (W, H), SIZZLE_CREAM)
+    draw = ImageDraw.Draw(img)
+
+    cx, cy = 950, 300
+    draw.polygon(flame_points(cx, cy, 420, 460), fill=SIZZLE_PINK)
+    draw.polygon(flame_points(cx + 55, cy + 55, 260, 300), fill=SIZZLE_CORAL)
+    draw.polygon(flame_points(cx + 25, cy + 165, 110, 130), fill=SIZZLE_CYAN)
+
+    title_font = ImageFont.truetype(FONT_DIR + "Arial Black.ttf", 96)
+    sub_font = ImageFont.truetype(FONT_DIR + "Arial Bold.ttf", 40)
+    subtitle = item["page_title"].replace("The Sizzle - ", "", 1).split(" - Issue ")
+    date_line = subtitle[0]
+    issue_line = f"Issue {subtitle[1]}" if len(subtitle) > 1 else ""
+
+    draw.text((80, 235), "The Sizzle", font=title_font, fill=SIZZLE_CHARCOAL)
+    draw.text((84, 355), date_line, font=sub_font, fill=SIZZLE_PINK)
+    if issue_line:
+        draw.text((84, 405), issue_line, font=sub_font, fill=SIZZLE_CORAL)
+
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
 def git(*args):
     return subprocess.run(["git", *args], cwd=SITE, capture_output=True, text=True)
 
 
 def publish(pages):
-    """Add `pages` (list of (fname, html)) to the repo, drop pages older than
+    """Add `pages` (list of (fname, content)) to the repo — content is str
+    for HTML, bytes for a Sizzle OG image PNG — drop pages older than
     RETAIN_DAYS (by local file mtime — the site clone is persistent), and
     force-amend a single commit so expired content leaves public history.
     Pages must stay live for a while because the Kobo re-fetches the original
     URL at download time, not just Instapaper's parsed copy.
 
     SITE is also the script's own source checkout, so staging is scoped to
-    just *.html — never `-A` — or any uncommitted edit sitting in the working
-    tree (e.g. mid-refactor) would get swept into this automated commit."""
+    just *.html/*.png — never `-A` — or any uncommitted edit sitting in the
+    working tree (e.g. mid-refactor) would get swept into this automated
+    commit."""
     cutoff = time.time() - RETAIN_DAYS * 86400
-    for f in glob.glob(os.path.join(SITE, "*.html")):
+    for f in glob.glob(os.path.join(SITE, "*.html")) + glob.glob(os.path.join(SITE, "*.png")):
         if os.path.basename(f) != "index.html" and os.path.getmtime(f) < cutoff:
             os.remove(f)
-    for fname, doc in pages:
-        with open(os.path.join(SITE, fname), "w", encoding="utf-8") as fh:
-            fh.write(doc)
-    git("add", "-A", "--", "*.html")
-    if not git("status", "--porcelain", "--", "*.html").stdout.strip():
+    for fname, content in pages:
+        mode = "wb" if isinstance(content, (bytes, bytearray)) else "w"
+        kwargs = {} if mode == "wb" else {"encoding": "utf-8"}
+        with open(os.path.join(SITE, fname), mode, **kwargs) as fh:
+            fh.write(content)
+    git("add", "-A", "--", "*.html", "*.png")
+    if not git("status", "--porcelain", "--", "*.html", "*.png").stdout.strip():
         return True  # nothing changed
     git("commit", "--amend", "-m", "pages", "--allow-empty")
     push = git("push", "--force", "origin", "main")
@@ -450,7 +507,12 @@ def main():
         if it.get("link"):
             staged.append((it, it["link"]))
             continue
-        fname = f"{uuid4().hex}.html"
+        base = uuid4().hex
+        if it.get("site_name") == "The Sizzle":
+            img_fname = f"{base}.png"
+            it["og_image"] = f"{PAGES_BASE}/{img_fname}"
+            pages.append((img_fname, make_sizzle_og_image(it)))
+        fname = f"{base}.html"
         pages.append((fname, make_page(it)))
         staged.append((it, f"{PAGES_BASE}/{fname}"))
     if digest:
