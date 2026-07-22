@@ -13,6 +13,9 @@ Design notes:
   force-amends a single commit, so old article content doesn't pile up in
   public git history. They stay live for a week because the Kobo re-fetches
   the original URL when an article is downloaded, not just at save time.
+- Verge's Top Stories is high-volume general news, not a once-a-day curated
+  newsletter, so it's bundled into a single digest page per day instead of
+  saving each item individually — see verge_top_stories_digest().
 """
 
 import base64
@@ -47,17 +50,21 @@ ATOM = "{http://www.w3.org/2005/Atom}"
 SIZZLE_FEED = ("https://rss.thesizzle.com.au/"
                "1b6df89e6efa6ae84cf536dd52f21b718ecd3c8beae2a3dc3b0a3992ee4caafe.xml")
 
-# Scope: Top Stories + the newsletters only. Category feeds (Tech, Reviews,
-# Science, Entertainment, Transportation, Quick Posts) are intentionally left
-# out — read those on desktop. Listed in de-dup priority order (earlier wins).
+# Scope: the newsletters only. Category feeds (Tech, Reviews, Science,
+# Entertainment, Transportation, Quick Posts) are intentionally left out —
+# read those on desktop. Listed in de-dup priority order (earlier wins).
 VERGE_FEEDS = [
     ("Notepad", "https://www.theverge.com/rss/partner/subscriber-only-notepad/rss.xml"),
     ("Regulator", "https://www.theverge.com/rss/partner/subscriber-only-regulator/rss.xml"),
     ("The Stepback", "https://www.theverge.com/rss/partner/subscriber-only-the-stepback/rss.xml"),
     ("Installer", "https://www.theverge.com/rss/partner/subscriber-only-installer/rss.xml"),
     ("Optimizer", "https://www.theverge.com/rss/partner/subscriber-only-optimizer-newsletter/rss.xml"),
-    ("Top Stories", "https://www.theverge.com/rss/partner/subscriber-only-full-feed/rss.xml"),
 ]
+
+# Top Stories is general news, not a curated once-a-day newsletter, so saving
+# each item individually floods the reading list. Bundled into one digest
+# page per day instead — see verge_top_stories_digest().
+VERGE_TOP_STORIES = ("Top Stories", "https://www.theverge.com/rss/partner/subscriber-only-full-feed/rss.xml")
 
 # atmo.io (Mo Bitar's Substack). Unlike Sizzle/Verge, its posts have real,
 # public, non-paywalled per-article links, so we hand Instapaper the article
@@ -145,45 +152,99 @@ def sizzle_items():
     return items
 
 
+def verge_entries(url):
+    """Parse one Verge RSS/Atom feed into raw entries, newest-unfiltered."""
+    root = ET.fromstring(fetch(url))
+    entries = root.findall(".//item")
+    atom = not entries
+    entries = entries or root.findall(f".//{ATOM}entry")
+    out = []
+    for it in entries:
+        if atom:
+            title = (it.findtext(f"{ATOM}title") or "").strip()
+            ident = (it.findtext(f"{ATOM}id") or "").strip()
+            link_el = it.find(f"{ATOM}link")
+            link = link_el.get("href") if link_el is not None else ""
+            body = it.findtext(f"{ATOM}content") or it.findtext(f"{ATOM}summary") or ""
+            dt = parse_date(it.findtext(f"{ATOM}published")
+                            or it.findtext(f"{ATOM}updated"))
+        else:
+            title = (it.findtext("title") or "").strip()
+            ident = (it.findtext("guid") or "").strip()
+            link = (it.findtext("link") or "").strip()
+            body = it.findtext(C_ENCODED) or it.findtext("description") or ""
+            dt = parse_date(it.findtext("pubDate"))
+        out.append({"aid": sha(ident, link, title), "title": title, "link": link,
+                    "body": body, "dt": dt})
+    return out
+
+
 def verge_items(claimed):
     items = []
     for section, url in VERGE_FEEDS:
         try:
-            root = ET.fromstring(fetch(url))
+            entries = verge_entries(url)
         except Exception as exc:  # noqa: BLE001
             log(f"[Verge:{section}] feed error: {exc}")
             continue
-        entries = root.findall(".//item")
-        atom = not entries
-        entries = entries or root.findall(f".//{ATOM}entry")
-        for it in entries:
-            if atom:
-                title = (it.findtext(f"{ATOM}title") or "").strip()
-                ident = (it.findtext(f"{ATOM}id") or "").strip()
-                link_el = it.find(f"{ATOM}link")
-                link = link_el.get("href") if link_el is not None else ""
-                body = it.findtext(f"{ATOM}content") or it.findtext(f"{ATOM}summary") or ""
-                dt = parse_date(it.findtext(f"{ATOM}published")
-                                or it.findtext(f"{ATOM}updated"))
-            else:
-                title = (it.findtext("title") or "").strip()
-                ident = (it.findtext("guid") or "").strip()
-                link = (it.findtext("link") or "").strip()
-                body = it.findtext(C_ENCODED) or it.findtext("description") or ""
-                dt = parse_date(it.findtext("pubDate"))
-            aid = sha(ident, link, title)
-            if aid in claimed:
+        for e in entries:
+            if e["aid"] in claimed:
                 continue
-            claimed.add(aid)
+            claimed.add(e["aid"])
             # Verge pages serve full article text to anonymous fetches (the
             # paywall is cookie-metered client-side; verified 2026-07-17), so
             # prefer the real link — it never expires. Self-host only if the
             # item has no link.
-            items.append({"id": aid, "page_title": title, "body": body,
-                          "link": link,
-                          "ip_title": f"{title} | Verge:{section}",
-                          "site_name": "The Verge", "dt": dt})
+            items.append({"id": e["aid"], "page_title": e["title"], "body": e["body"],
+                          "link": e["link"],
+                          "ip_title": f"{e['title']} | Verge:{section}",
+                          "site_name": "The Verge", "dt": e["dt"]})
     return items
+
+
+def verge_top_stories_digest(claimed, added):
+    """Bundle today's new Top Stories items into one self-hosted digest page
+    instead of saving each individually — Top Stories is high-volume general
+    news and floods the reading list otherwise.
+
+    Rebuilds the whole day's page from the live feed every run, so it always
+    reflects everything published today rather than just this run's new
+    items, but calls Instapaper's add API only once per day: the Kobo
+    re-fetches the page at download time (see module docstring), so later
+    additions still show up under that one saved link. Returns None if
+    there's nothing to publish (no items published today, or all already
+    claimed by a newsletter feed)."""
+    section, url = VERGE_TOP_STORIES
+    try:
+        entries = verge_entries(url)
+    except Exception as exc:  # noqa: BLE001
+        log(f"[Verge:{section}] feed error: {exc}")
+        return None
+
+    today = datetime.now(timezone.utc).date()
+
+    def published_today(dt):
+        if dt is None:
+            return False
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc).date() == today
+
+    todays = [e for e in entries if e["aid"] not in claimed and published_today(e["dt"])]
+    if not todays:
+        return None
+    todays.sort(key=lambda e: e["dt"])
+
+    short = f"The Verge - Top Stories - {today.day}/{today.month}"
+    marker = f"verge-digest-{today.isoformat()}"
+    return {
+        "fname": f"verge-top-stories-{today.isoformat()}.html",
+        "html": make_digest_page(today, todays),
+        "needs_add": marker not in added,
+        "count": len(todays),
+        "ip_title": short,
+        "item": {"id": marker, "ip_title": short},
+    }
 
 
 def atmoio_items():
@@ -246,6 +307,27 @@ def make_page(item):
             f"</head><body><article><h1>{t}</h1>{item['body']}</article></body></html>")
 
 
+def make_digest_page(date, entries):
+    """Render a day's Top Stories digest from its entries, oldest first, each
+    keeping a link back to the real article."""
+    heading = f"The Verge - Top Stories - {date.strftime('%A')} {ordinal(date.day)} {date.strftime('%B')}"
+    t = html.escape(heading)
+    sections = []
+    for e in entries:
+        title = html.escape(e["title"])
+        link = html.escape(e["link"], quote=True)
+        sections.append(f"<h2>{title}</h2><p><a href=\"{link}\">Read on theverge.com</a></p>{e['body']}")
+    og_img = first_image(entries[0]["body"]) if entries else ""
+    og = (f"<meta property='og:image' content=\"{html.escape(og_img, quote=True)}\">"
+          if og_img else "")
+    return (f"<!DOCTYPE html><html><head><meta charset='utf-8'><title>{t}</title>"
+            f"<meta name='robots' content='noindex, nofollow, noarchive'>"
+            f"<meta property='og:type' content='article'>"
+            f"<meta property='og:site_name' content=\"The Verge\">"
+            f"<meta property='og:title' content=\"{t}\">{og}"
+            f"</head><body><article><h1>{t}</h1>{''.join(sections)}</article></body></html>")
+
+
 def git(*args):
     return subprocess.run(["git", *args], cwd=SITE, capture_output=True, text=True)
 
@@ -255,7 +337,11 @@ def publish(pages):
     RETAIN_DAYS (by local file mtime — the site clone is persistent), and
     force-amend a single commit so expired content leaves public history.
     Pages must stay live for a while because the Kobo re-fetches the original
-    URL at download time, not just Instapaper's parsed copy."""
+    URL at download time, not just Instapaper's parsed copy.
+
+    SITE is also the script's own source checkout, so staging is scoped to
+    just *.html — never `-A` — or any uncommitted edit sitting in the working
+    tree (e.g. mid-refactor) would get swept into this automated commit."""
     cutoff = time.time() - RETAIN_DAYS * 86400
     for f in glob.glob(os.path.join(SITE, "*.html")):
         if os.path.basename(f) != "index.html" and os.path.getmtime(f) < cutoff:
@@ -263,8 +349,8 @@ def publish(pages):
     for fname, doc in pages:
         with open(os.path.join(SITE, fname), "w", encoding="utf-8") as fh:
             fh.write(doc)
-    git("add", "-A")
-    if not git("status", "--porcelain").stdout.strip():
+    git("add", "-A", "--", "*.html")
+    if not git("status", "--porcelain", "--", "*.html").stdout.strip():
         return True  # nothing changed
     git("commit", "--amend", "-m", "pages", "--allow-empty")
     push = git("push", "--force", "origin", "main")
@@ -337,7 +423,11 @@ def main():
     if args.limit:
         new = new[:args.limit]
 
-    if not new:
+    # Built from the live feed (not just this run's new items), so it can be
+    # non-None even when `new` is empty, and vice versa.
+    digest = verge_top_stories_digest(claimed, added)
+
+    if not new and not digest:
         log("No new items. Up to date.")
         # still refresh the repo to expire pages past RETAIN_DAYS
         if not args.dry_run:
@@ -347,6 +437,9 @@ def main():
     if args.dry_run:
         for it in new:
             log(f"  [dry-run] {it['ip_title'][:90]}")
+        if digest:
+            log(f"  [dry-run] {digest['ip_title']} ({digest['count']} item(s) today, "
+                f"{'new' if digest['needs_add'] else 'already saved'})")
         return 0
 
     # Items with a real public `link` are saved by that URL directly; the rest
@@ -360,6 +453,11 @@ def main():
         fname = f"{uuid4().hex}.html"
         pages.append((fname, make_page(it)))
         staged.append((it, f"{PAGES_BASE}/{fname}"))
+    if digest:
+        pages.append((digest["fname"], digest["html"]))
+        digest_url = f"{PAGES_BASE}/{digest['fname']}"
+        if digest["needs_add"]:
+            staged.append((digest["item"], digest_url))
     # A publish/deploy failure only blocks the self-hosted items; direct-link
     # items don't depend on GitHub Pages, so save them regardless.
     log(f"Publishing {len(pages)} page(s) to GitHub Pages...")
