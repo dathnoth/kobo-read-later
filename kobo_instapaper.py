@@ -331,14 +331,22 @@ def make_page(item):
 
 def make_digest_page(date, entries, og_image=None):
     """Render a day's Top Stories digest from its entries, oldest first, each
-    keeping a link back to the real article."""
+    keeping a link back to the real article. Leads with a headline list
+    (anchor-linked to each section) so it's scannable before committing to
+    reading the whole page — mirrors the "In Today's Issue" list Sizzle's
+    own newsletter already leads with."""
     heading = f"The Verge - Top Stories - {date.strftime('%A')} {ordinal(date.day)} {date.strftime('%B')}"
     t = html.escape(heading)
+    headlines = []
     sections = []
-    for e in entries:
+    for i, e in enumerate(entries):
         title = html.escape(e["title"])
         link = html.escape(e["link"], quote=True)
-        sections.append(f"<h2>{title}</h2><p><a href=\"{link}\">Read on theverge.com</a></p>{e['body']}")
+        anchor = f"story-{i}"
+        headlines.append(f"<li><a href=\"#{anchor}\">{title}</a></li>")
+        sections.append(f"<h2 id=\"{anchor}\">{title}</h2>"
+                        f"<p><a href=\"{link}\">Read on theverge.com</a></p>{e['body']}")
+    toc = f"<h2>In Today's Stories</h2><ul>{''.join(headlines)}</ul>" if headlines else ""
     og_img = og_image or (first_image(entries[0]["body"]) if entries else "")
     og = (f"<meta property='og:image' content=\"{html.escape(og_img, quote=True)}\">"
           if og_img else "")
@@ -347,7 +355,7 @@ def make_digest_page(date, entries, og_image=None):
             f"<meta property='og:type' content='article'>"
             f"<meta property='og:site_name' content=\"The Verge\">"
             f"<meta property='og:title' content=\"{t}\">{og}"
-            f"</head><body><article><h1>{t}</h1>{''.join(sections)}</article></body></html>")
+            f"</head><body><article><h1>{t}</h1>{toc}{''.join(sections)}</article></body></html>")
 
 
 def flame_points(cx, cy, w, h):
