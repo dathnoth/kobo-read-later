@@ -330,23 +330,31 @@ def make_page(item):
 
 
 def make_digest_page(date, entries, og_image=None):
-    """Render a day's Top Stories digest from its entries, oldest first, each
-    keeping a link back to the real article. Leads with a headline list
-    (anchor-linked to each section) so it's scannable before committing to
-    reading the whole page — mirrors the "In Today's Issue" list Sizzle's
-    own newsletter already leads with."""
+    """Render a day's Top Stories digest as a 2-column grid of headline+image
+    cards linking straight to the real article — not the full text. Kobo's
+    Instapaper reader offers "save to Instapaper" on any tapped hyperlink, so
+    this page is a browsing index: skim headlines and images, tap the ones
+    worth reading to queue them individually, instead of scrolling every
+    article inline.
+
+    Uses inline-block, not grid/flexbox: Instapaper's reader (and possibly
+    Kobo's own on-device fetch-and-render) may strip a page's original CSS
+    and reflow it into a single-column reading template — inline-block still
+    degrades cleanly to one column if that happens, where a grid/flex layout
+    might just break."""
     heading = f"The Verge - Top Stories - {date.strftime('%A')} {ordinal(date.day)} {date.strftime('%B')}"
     t = html.escape(heading)
-    headlines = []
-    sections = []
-    for i, e in enumerate(entries):
+    cards = []
+    for e in entries:
         title = html.escape(e["title"])
         link = html.escape(e["link"], quote=True)
-        anchor = f"story-{i}"
-        headlines.append(f"<li><a href=\"#{anchor}\">{title}</a></li>")
-        sections.append(f"<h2 id=\"{anchor}\">{title}</h2>"
-                        f"<p><a href=\"{link}\">Read on theverge.com</a></p>{e['body']}")
-    toc = f"<h2>In Today's Stories</h2><ul>{''.join(headlines)}</ul>" if headlines else ""
+        img = first_image(e["body"])
+        img_tag = (f"<img src=\"{html.escape(img, quote=True)}\" alt=\"\" "
+                   f"style=\"width:100%;height:auto;display:block\">" if img else "")
+        cards.append(
+            "<div style=\"display:inline-block;width:47%;vertical-align:top;margin:0 1.5% 28px\">"
+            f"<a href=\"{link}\" style=\"text-decoration:none;color:inherit\">"
+            f"{img_tag}<h3 style=\"margin:8px 0 0\">{title}</h3></a></div>")
     og_img = og_image or (first_image(entries[0]["body"]) if entries else "")
     og = (f"<meta property='og:image' content=\"{html.escape(og_img, quote=True)}\">"
           if og_img else "")
@@ -355,7 +363,7 @@ def make_digest_page(date, entries, og_image=None):
             f"<meta property='og:type' content='article'>"
             f"<meta property='og:site_name' content=\"The Verge\">"
             f"<meta property='og:title' content=\"{t}\">{og}"
-            f"</head><body><article><h1>{t}</h1>{toc}{''.join(sections)}</article></body></html>")
+            f"</head><body><article><h1>{t}</h1>{''.join(cards)}</article></body></html>")
 
 
 def flame_points(cx, cy, w, h):
