@@ -253,7 +253,7 @@ def verge_top_stories_digest(claimed, added):
         return None
     todays.sort(key=lambda e: e["dt"])
 
-    short = f"The Verge - Top Stories - {today.day}/{today.month}"
+    short = f"Verge - {today.strftime('%A')} {ordinal(today.day)} {today.strftime('%b')}"
     marker = f"verge-digest-{today.isoformat()}"
     base = f"verge-top-stories-{today.isoformat()}"
     img_url = f"{PAGES_BASE}/{base}.png"
@@ -337,7 +337,7 @@ def make_digest_page(date, entries, og_image=None):
     Kobo's Instapaper reader offers "save to Instapaper" on any tapped
     hyperlink, so this page is a browsing index: skim headlines, tap the ones
     worth reading to queue them individually."""
-    heading = f"The Verge - Top Stories - {date.strftime('%A')} {ordinal(date.day)} {date.strftime('%B')}"
+    heading = f"Verge - {date.strftime('%A')} {ordinal(date.day)} {date.strftime('%b')}"
     t = html.escape(heading)
     items = []
     for e in entries:
