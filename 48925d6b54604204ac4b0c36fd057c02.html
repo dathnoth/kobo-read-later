@@ -1,0 +1,95 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>The Sizzle - Wednesday 7th October - Issue 2665</title><meta name='robots' content='noindex, nofollow, noarchive'><meta property='og:type' content='article'><meta property='og:site_name' content="The Sizzle"><meta property='og:title' content="The Sizzle - Wednesday 7th October - Issue 2665"><meta property='og:image' content="https://dathnoth.github.io/kobo-read-later/48925d6b54604204ac4b0c36fd057c02.png"></head><body><article><h1>The Sizzle - Wednesday 7th October - Issue 2665</h1><img class="logo" src="https://dathnoth.github.io/kobo-read-later/48925d6b54604204ac4b0c36fd057c02-2.png">
+		
+		<div id="date"><h3>Issue 2665 - Wednesday 7th October, 2026</h3></div>
+
+		<h2>In Today's Issue</h2>
+		<div id="headlines">
+			<ul>
+				<li id="headline1_top">OpenAI fronts Australian senate inquiry, Wikimedia finds its own rogue agents, OpenAI does more math stuff</li>
+				<li id="headline2_top">Windows 11 26H2 is a "predictable and low-disruption update" rolling out now</li>
+				<li id="headline3_top">Someone found a way to escape a KVM VM, Vercel paid out a bug bounty for it but we have no details about the 0day</li>
+				<li id="headline4_top">Why not place a mini AI datacentre near EV chargers?</li>
+				<li id="headline5_top">Cheap Samsung earbuds, Catan board game, HP mini PC, Nothing phone, Elgato Stream Deck</li>
+			</ul>
+		</div>
+
+		<h2>The News</h2>
+
+		<div id="story1">
+		<div id="headline1"><h3>OpenAI fronts Australian senate inquiry, Wikimedia finds its own rogue agents, OpenAI does more math stuff</h3></div>
+			<div id="contents1">
+				<p>
+					OpenAI sent their chief strategy officer <a href="https://ia.acs.org.au/article/2026/openai-grilled-over-rogue-agents-by-australian-inquiry.html">Jason Kwon to appear at the joint select committee on AI</a> and repent for their sin "hacking" of Australian government websites. It was pretty uneventful, nothing interesting to report besides the usual politicians asking questions and a sheepish dude in a suit sticking to OpenAI's talking points. Wikimedia made public that <a href="https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/">OpenAI's agents abused its websites too</a>, making "edits to our wikis, some unsuccessful attempts to exploit a public note-taking tool we host, and heavy traffic". Over in the mathematics department, OpenAI published <a href="https://github.com/openai/math">a GitHub repo</a> with "722 manuscripts organized into 372 families" containing solutions to loads of long standing math problems. Does solving these math problems lead to any practical, applied outcomes that benefit humanity? Otherwise, what was the point?
+				</p>
+			</div>
+		</div>
+
+		<div id="story2">
+		<div id="headline2"><h3>Windows 11 26H2 is a "predictable and low-disruption update" rolling out now</h3></div>
+			<div id="contents2">
+				<p>
+					Windows 11 26H2 was released last week and is starting to roll out to more users. Here's a list of things Microsoft reckons <a href="https://learn.microsoft.com/en-us/windows/whats-new/whats-new-windows-11-version-26h2">"IT pros" should know</a> about the new update. Not a lot of <a href="https://x.com/WindowsUpdate/status/2104983032482717978">user facing changes</a> (sorry for the link to X), just "a smarter file explorer", "better Windows Search", some accessibility stuff and more "ways to make Windows your own". <a href="https://blogs.windows.com/windowsexperience/2026/09/29/how-to-get-windows-11-2026-update/">Microsoft themselves are describing</a> it a "predictable and low-disruption update" that "brings together" all the little updates 25H2 got over the last 12 months into one big update. Probably the best thing in 26H2 is the lower RAM consumption, with <a href="https://www.windowslatest.com/2026/10/06/microsoft-reveals-whats-actually-new-in-windows-11-26h2-and-how-to-verify-it/">WindowsLatest</a> saying that "on my three-year-old 16GB RAM laptop, and right after a restart, Task Manager showed 7GB in use out of 15.7GB. Earlier, it would cross 10GB before I even opened an app" and the new <a href="https://www.windowscentral.com/microsoft/windows-11/confused-about-low-latency-profile-on-windows-11-heres-what-we-know-so-far">Low Latency Profile</a> manager helps speed up app launching.
+				</p>
+			</div>
+		</div>
+
+		<div id="story3">
+		<div id="headline3"><h3>Someone found a way to escape a KVM VM, Vercel paid out a bug bounty for it but we have no details about the 0day</h3></div>
+			<div id="contents3">
+				<p>
+					Security researcher Paulos Yibelo posted on X earlier in the week that <a href="https://www.theregister.com/offbeat/2026/10/06/security-researcher-claims-they-found-kvm-guest-host-escape-flaw/5301267">Vercel paid out a bug bounty to him</a> for a "full VM escape zeroday (guest>host root in industry standard hypervisors)!", with Vercel responding to the post on X with "we've confirmed a KVM 0day through our Vercel Sandbox bounty program. Affecting the industry's gold standard solution for Linux virtualization". Yes it's as bad as it sounds - a way for someone with access to a virtual machine to get access to other VMs on the same host. KVM is used in so many places too. All the VPSes I run use KVM. My Proxmox homelab server uses KVM. Even Google and Amazon use KVM for their cloud services. We have no details on what the exploit looks like or even if KVM is aware of it and if a fix is coming. 
+				</p>
+			</div>
+		</div>
+
+		<h2>Something I Saw On The Internet</h2>
+
+		<div id="story4">
+		<div id="headline4"><h3>Why not place a mini AI datacentre near EV chargers?</h3></div>
+			<div id="contents4">
+				<p>
+					An EV charging network in the USA called Xeal is planning to <a href="https://www.tomshardware.com/tech-industry/data-centers/ev-charging-company-plans-to-deploy-100-000-nvidia-gpus-in-pods-at-its-roadside-sites-across-the-us-aims-to-offer-worlds-first-edge-inference-compute-network-using-idle-ev-charging-capacity">install boxes at charging sites packed with 48x Nvidia GPUs</a>. These "Latient Pods" leverage either the spare existing capacity at their sites or allow for upgrades where they already have permission. They've got 1,600 locations in mind and up to 200MW of electricity to play with. Xeal can then lease the compute to whoever wants it. The first <a href="https://laitent.ai/press/laitent-launch">Latient Pod will go online later this year</a>. Honestly, it's a pretty smart idea considering the biggest problem for AI inference is electricity and they have loads of spare electricity. 48x Nvidia GPUs worth almost US$2m out in the open is asking for trouble though. We've seen what junkies do to EV charging sites for a few bucks of scrap copper, imagine what they'll do for a few dozen Nvidia GPUs!
+				</p>
+			</div>
+		</div>
+
+		<h2>Bargains</h2>
+		<div id="bargains">
+			<ul>
+				<li><a href="https://www.ozbargain.com.au/node/977892">Samsung Galaxy Buds 4</a> - $179 from Telstra</li>
+				<li><a href="https://www.ozbargain.com.au/node/977927">Catan: The Game 6th Edition (board game)</a> - $49 at Target</li>
+				<li><a href="https://www.ozbargain.com.au/node/977932">HP EliteDesk 800 G4 Micro</a> (i5-8500T, 8GB RAM, 256GB SSD) - $161 from Australian Computer Trader's eBay store</li>
+				<li><a href="https://www.ozbargain.com.au/node/977982">Nothing CMF Phone 2 Pro</a> - $199 from Amaysim with a "plan"</li>
+				<li><a href="https://www.ozbargain.com.au/node/978013">Elgato Stream Deck + XL</a> - $464 from Amazon</li>
+			</ul>
+		</div>
+
+
+
+		<h2>Image Of The Day</h2>
+			<div id="iotd">
+<p><a href="https://iotd.thesizzle.com.au/images/LRC-1967-B701_P-05655.tif"><img class="iotd" src="https://dathnoth.github.io/kobo-read-later/48925d6b54604204ac4b0c36fd057c02-0.jpg"></a></p>
+<p><em>Lunar Orbiter was essentially a flying camera. The payload structure was built around a pressurized shell holding Eastman Kodak's dual-imaging photographic system, which used a camera with wide-angle and telephoto lenses that could simultaneously take two kinds of pictures on the same film. Men in in the picture are: Right to left Cliff Nelson, Calvin Broome, Israel Taback and Joe Mooreman. (<a href="https://images.nasa.gov/details/LRC-1967-B701_P-05655">NASA</a>)</em></p>
+		</div>
+
+		<h2>The End</h2>
+
+		<div id="music"><p>&#x1F4FB; <a href="https://www.youtube.com/watch?v=1liG0P61DPc">TV On The Radio – Wolf Like Me</a></p></div>
+
+		<div id="author"><p>&#x1F60E; The Sizzle is curated by Anthony "<a href="https://decryption.net.au/">decryption</a>" Agius and emailed every weekday afternoon.</p> </div>
+
+		<p>&#x1F4AC; Checked out the <a href="https://forum.thesizzle.com.au/">paid subscriber only forum?</a> It's a tidy little place to discuss tech with like minded Aussies.</p>
+
+		<p>&#x1F44B; Forums not your thing? The Sizzle has a <a href="https://join.slack.com/t/the-sizzle/shared_invite/zt-zpixje75-F5wnx00PZiO55pmmpprCUw">Slack group you can procrastinate in</a> and chat with other nerds bored at work.</p>
+
+		<p>&#x1F6DC; There's an RSS feed of this newsletter too, but only for paid subscribers. <a href="https://thesizzle.com.au/rss.html">Visit the Sizzle website to learn more</a>.</p>
+
+		<p>&#x1F4B3; Paid subscriber looking to manage your billing info, change email address or cancel your subscription? <a href="https://thesizzle.com.au/manage.html">Visit the customer portal</a>.</p>
+
+		<p>&#x1F494; Tired of my bullshit? <a href="">Unsubscribe</a> and I'll never speak to you again.</p>
+
+		<h2>Always Was, Always Will Be Aboriginal Land</h2>
+
+		<p><em>The Sizzle is created on Wathaurong land and acknowledges the traditional owners of country throughout Australia, recognising their continuing connection to land, water and community. I pay my respect to them and their cultures and to elders both past and present.</em></p>
+
+		<img class="inline" src="https://dathnoth.github.io/kobo-read-later/48925d6b54604204ac4b0c36fd057c02-1.gif"></article></body></html>
