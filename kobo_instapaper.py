@@ -39,11 +39,12 @@ from uuid import uuid4
 from PIL import Image, ImageDraw, ImageFont
 
 HOME = os.path.expanduser("~")
-SITE = os.path.join(HOME, "koboRss")
+SITE = os.path.dirname(os.path.abspath(__file__))  # this checkout is the Pages repo
 PAGES_BASE = "https://dathnoth.github.io/kobo-read-later"
 STATE = os.path.join(HOME, ".the-kobo-instapaper/added.txt")
 CONFIG = os.path.join(HOME, ".config/feeds-to-instapaper/config.toml")
 UA = "Mozilla/5.0 the-kobo-instapaper/1"
+IMG_EXTS = ("png", "jpg", "jpeg", "gif", "webp")  # page assets published alongside *.html
 WINDOW_DAYS = 2  # only ever save items published within the last N days
 RETAIN_DAYS = 7  # keep published pages live this long (Kobo fetches at download time)
 
@@ -147,6 +148,60 @@ def first_image(body):
     return html.unescape(m.group(1)) if m else ""
 
 
+def keep_one_image(body):
+    """Drop all but one <img> from `body`. Kobo's Instapaper reader shows no
+    images at all for an article with two or more inline images, but does show
+    one plus the og:image cover (confirmed on-device 2026-10-29; image host,
+    size, dimensions and format made no difference). Keep the Sizzle's Picture
+    of the Day (class="iotd") if present — its logo is already the cover card —
+    else the first image."""
+    imgs = re.findall(r"<img[^>]*>", body)
+    if len(imgs) <= 1:
+        return body
+    keep = next((t for t in imgs if 'class="iotd"' in t), imgs[0])
+    kept = False
+
+    def repl(m):
+        nonlocal kept
+        if m.group(0) == keep and not kept:
+            kept = True
+            return m.group(0)
+        return ""
+    return re.sub(r"<img[^>]*>", repl, body)
+
+
+def localize_images(body, base):
+    """Download each remote <img> in `body` and point it at a copy published
+    next to the page. The Kobo fetches article images itself at download time,
+    and Sizzle's image CDN (BunnyCDN, moved to Let's Encrypt's newer ECDSA
+    YE-chain in 2026) stopped loading there, while github.io still does.
+    Returns (body, [(fname, bytes)]); images that fail to download keep their
+    original URL."""
+    files = []
+    urls = sorted(set(re.findall(r'<img[^>]+src=["\']([^"\']+)["\']', body)))
+    for i, raw in enumerate(urls):
+        src = html.unescape(raw)
+        if not src.lower().startswith(("http://", "https://")):
+            continue
+        for attempt in range(2):  # one retry: the CDN occasionally times out
+            try:
+                data = fetch(urllib.parse.quote(src, safe=":/?&=%#,;+~"))
+                fmt = (Image.open(io.BytesIO(data)).format or "").lower()
+                break
+            except Exception as exc:  # noqa: BLE001 - best effort, keep going
+                err = exc
+        else:
+            log(f"  (image not localized: {src} - {err})")
+            continue
+        ext = "jpg" if fmt == "jpeg" else fmt
+        if ext not in IMG_EXTS:
+            continue
+        fname = f"{base}-{i}.{ext}"
+        files.append((fname, data))
+        body = body.replace(raw, f"{PAGES_BASE}/{fname}")
+    return body, files
+
+
 # --- feed parsing -> list of items ------------------------------------------
 # item = {id, page_title, body, ip_title, ip_selection}
 
@@ -156,8 +211,15 @@ def sizzle_items():
     for it in root.find("channel").findall("item"):
         guid = (it.findtext("guid") or it.findtext("title") or "").strip()
         body = it.findtext("description") or ""
+        # Drop the sign-off footer ("The End" onward: subscriber links, land
+        # acknowledgement and the typing-computer GIF) — boilerplate on a Kobo.
+        # Keep the day's song link, which sits just under that heading.
+        body, _, footer = body.partition("<h2>The End</h2>")
+        music = re.search(r'<div id="music">.*?</div>', footer, re.S)
+        if music:
+            body += music.group(0)
         dt = parse_date(it.findtext("pubDate"))
-        num = (re.search(r"(\d+)", it.findtext("title") or "") or [None])[0]
+        num =(re.search(r"(\d+)", it.findtext("title") or "") or [None])[0]
         if dt:
             full = f"The Sizzle - {dt.strftime('%A')} {ordinal(dt.day)} {dt.strftime('%B')}"
             short = f"The Sizzle - {dt.strftime('%A')} {dt.day}/{dt.month}"
@@ -421,24 +483,33 @@ def make_verge_digest_og_image(date, count):
     return buf.getvalue()
 
 
-def git(*args):
-    return subprocess.run(["git", *args], cwd=SITE, capture_output=True, text=True)
+def git(*args, timeout=None):
+    """Run git in SITE. A timeout counts as a failed command (returncode 1)
+    rather than hanging the job — launchd skips scheduled runs while one is
+    still going, so a stalled push would otherwise block every later run."""
+    try:
+        return subprocess.run(["git", *args], cwd=SITE, capture_output=True,
+                              text=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return subprocess.CompletedProcess(args, 1, "", f"timed out after {timeout}s")
 
 
 def publish(pages):
     """Add `pages` (list of (fname, content)) to the repo — content is str
-    for HTML, bytes for a Sizzle OG image PNG — drop pages older than
+    for HTML, bytes for images (OG cards, localized article images) — drop
+    pages and images older than
     RETAIN_DAYS (by local file mtime — the site clone is persistent), and
     force-amend a single commit so expired content leaves public history.
     Pages must stay live for a while because the Kobo re-fetches the original
     URL at download time, not just Instapaper's parsed copy.
 
     SITE is also the script's own source checkout, so staging is scoped to
-    just *.html/*.png — never `-A` — or any uncommitted edit sitting in the
+    just *.html and IMG_EXTS — never `-A` — or any uncommitted edit sitting in the
     working tree (e.g. mid-refactor) would get swept into this automated
     commit."""
+    patterns = ["*.html"] + [f"*.{e}" for e in IMG_EXTS]
     cutoff = time.time() - RETAIN_DAYS * 86400
-    for f in glob.glob(os.path.join(SITE, "*.html")) + glob.glob(os.path.join(SITE, "*.png")):
+    for f in (f for pat in patterns for f in glob.glob(os.path.join(SITE, pat))):
         if os.path.basename(f) != "index.html" and os.path.getmtime(f) < cutoff:
             os.remove(f)
     for fname, content in pages:
@@ -446,11 +517,16 @@ def publish(pages):
         kwargs = {} if mode == "wb" else {"encoding": "utf-8"}
         with open(os.path.join(SITE, fname), mode, **kwargs) as fh:
             fh.write(content)
-    git("add", "-A", "--", "*.html", "*.png")
-    if not git("status", "--porcelain", "--", "*.html", "*.png").stdout.strip():
+    # Stage only the paths that actually changed: `git add` aborts the whole
+    # call if any one pattern (e.g. *.webp) matches nothing.
+    changed = git("ls-files", "--others", "--modified", "--deleted",
+                  "--exclude-standard", "--", *patterns).stdout.split()
+    if changed:
+        git("add", "-A", "--", *sorted(set(changed)))
+    if not git("status", "--porcelain", "--", *patterns).stdout.strip():
         return True  # nothing changed
     git("commit", "--amend", "-m", "pages", "--allow-empty")
-    push = git("push", "--force", "origin", "main")
+    push = git("push", "--force", "origin", "main", timeout=180)
     if push.returncode != 0:
         log(f"git push failed: {push.stderr.strip()[:160]}")
         return False
@@ -548,10 +624,13 @@ def main():
             staged.append((it, it["link"]))
             continue
         base = uuid4().hex
+        it["body"] = keep_one_image(it["body"])
         if it.get("site_name") == "The Sizzle":
             img_fname = f"{base}.png"
             it["og_image"] = f"{PAGES_BASE}/{img_fname}"
             pages.append((img_fname, make_sizzle_og_image(it)))
+            it["body"], imgs = localize_images(it["body"], base)
+            pages.extend(imgs)
         fname = f"{base}.html"
         pages.append((fname, make_page(it)))
         staged.append((it, f"{PAGES_BASE}/{fname}"))
