@@ -29,6 +29,7 @@ import re
 import subprocess
 import sys
 import time
+import traceback
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -43,6 +44,8 @@ SITE = os.path.dirname(os.path.abspath(__file__))  # this checkout is the Pages 
 PAGES_BASE = "https://dathnoth.github.io/kobo-read-later"
 STATE = os.path.join(HOME, ".the-kobo-instapaper/added.txt")
 CONFIG = os.path.join(HOME, ".config/feeds-to-instapaper/config.toml")
+RUNS = os.path.join(HOME, ".the-kobo-instapaper/runs.jsonl")  # one JSON line per run, read by Dodo's Kobo page
+RUNS_KEEP = 1000  # ~6 weeks of hourly runs
 UA = "Mozilla/5.0 the-kobo-instapaper/1"
 IMG_EXTS = ("png", "jpg", "jpeg", "gif", "webp")  # page assets published alongside *.html
 WINDOW_DAYS = 2  # only ever save items published within the last N days
@@ -92,8 +95,33 @@ VERGE_TOP_STORIES = ("Top Stories", "https://www.theverge.com/rss/partner/subscr
 ATMOIO_FEED = "https://atmoio.substack.com/feed"
 
 
+# This run's log lines, saved items and problems, written to RUNS at the end.
+RUN = {"log": [], "saved": [], "warnings": []}
+
+
 def log(msg):
     print(msg, flush=True)
+    RUN["log"].append(msg)
+
+
+def warn(msg):
+    """Log something that went wrong but didn't stop the run."""
+    log(msg)
+    RUN["warnings"].append(msg.strip())
+
+
+def record_run(started, code):
+    run = {"started": started, "finished": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+           "status": "failed" if code else "warning" if RUN["warnings"] else "ok", **RUN}
+    try:
+        lines = open(RUNS, encoding="utf-8").read().splitlines()[-(RUNS_KEEP - 1):]
+    except FileNotFoundError:
+        lines = []
+    os.makedirs(os.path.dirname(RUNS), exist_ok=True)
+    tmp = RUNS + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines + [json.dumps(run)]) + "\n")
+    os.replace(tmp, RUNS)
 
 
 def creds():
@@ -265,7 +293,7 @@ def verge_items(claimed):
         try:
             entries = verge_entries(url)
         except Exception as exc:  # noqa: BLE001
-            log(f"[Verge:{section}] feed error: {exc}")
+            warn(f"[Verge:{section}] feed error: {exc}")
             continue
         for e in entries:
             if e["aid"] in claimed:
@@ -298,7 +326,7 @@ def verge_top_stories_digest(claimed, added):
     try:
         entries = verge_entries(url)
     except Exception as exc:  # noqa: BLE001
-        log(f"[Verge:{section}] feed error: {exc}")
+        warn(f"[Verge:{section}] feed error: {exc}")
         return None
 
     today = datetime.now(timezone.utc).date()
@@ -368,7 +396,7 @@ def atmoio_items():
                       "ip_title": f"{title} | atmo.io", "og_image": avatar,
                       "site_name": "atmo.io", "dt": dt})
     if stubbed:
-        log(f"[atmo.io] {stubbed} item(s) came back as previews — "
+        warn(f"[atmo.io] {stubbed} item(s) came back as previews — "
             f"{'sid cookie likely expired; refresh substack_sid in config' if sid else 'no substack_sid configured'}.")
     return items
 
@@ -528,7 +556,7 @@ def publish(pages):
     git("commit", "--amend", "-m", "pages", "--allow-empty")
     push = git("push", "--force", "origin", "main", timeout=180)
     if push.returncode != 0:
-        log(f"git push failed: {push.stderr.strip()[:160]}")
+        warn(f"git push failed: {push.stderr.strip()[:160]}")
         return False
     return True
 
@@ -645,11 +673,11 @@ def main():
     log(f"Publishing {len(pages)} page(s) to GitHub Pages...")
     hosted_ok = publish(pages)  # also expires pages past RETAIN_DAYS
     if not hosted_ok:
-        log("publish failed; hosted items will retry next run.")
+        warn("publish failed; hosted items will retry next run.")
     else:
         hosted = [url for it, url in staged if not it.get("link")]
         if hosted and not wait_live(hosted[0]):
-            log("Pages did not go live in time; hosted items will retry next run.")
+            warn("Pages did not go live in time; hosted items will retry next run.")
             hosted_ok = False
     if not hosted_ok:
         staged = [(it, url) for it, url in staged if it.get("link")]
@@ -665,14 +693,23 @@ def main():
                 record_added(it["id"])
                 saved += 1
                 log(f"  saved {it['ip_title'][:70]}")
+                RUN["saved"].append({"title": it["ip_title"], "source": it.get("site_name", ""), "url": url})
             else:
-                log(f"  add returned HTTP {status}: {it['ip_title'][:50]}")
+                warn(f"  add returned HTTP {status}: {it['ip_title'][:50]}")
         except Exception as exc:  # noqa: BLE001
-            log(f"  add FAILED: {it['ip_title'][:50]} - {exc}")
+            warn(f"  add FAILED: {it['ip_title'][:50]} - {exc}")
 
     log(f"Done. {saved}/{len(staged)} saved to Instapaper.")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    started = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    try:
+        code = main()
+    except Exception:  # noqa: BLE001 - record the crash, then fail as before
+        log(traceback.format_exc().rstrip())
+        code = 1
+    if "--dry-run" not in sys.argv[1:]:  # previews aren't real runs
+        record_run(started, code)
+    sys.exit(code)
